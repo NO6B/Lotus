@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Serenia - Institut de Massage Moderne</title>
+
+  <!-- Tailwind CSS local compile -->
+  <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@200;300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-thumb { background: #c8b89a; border-radius: 2px; }
+
+    @keyframes fadeUp     { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes floatBadge { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
+
+    .anim-up { animation: fadeUp 0.75s cubic-bezier(.25,.46,.45,.94) forwards; opacity:0; }
+    .d1 { animation-delay:.08s; }
+    .d2 { animation-delay:.22s; }
+    .d3 { animation-delay:.38s; }
+    .d4 { animation-delay:.54s; }
+    .d5 { animation-delay:.70s; }
+    .float-badge { animation: floatBadge 4.5s ease-in-out infinite; }
+
+    .nav-lk { position:relative; transition:color .3s; }
+    .nav-lk::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px; background:#8b6f47; transition:width .35s cubic-bezier(.25,.46,.45,.94); }
+    .nav-lk:hover::after { width:100%; }
+    .nav-lk:hover { color:#1a1610 !important; }
+
+    .img-wrap { overflow:hidden; }
+    .img-wrap img { transition:transform .9s cubic-bezier(.25,.46,.45,.94); width:100%; height:100%; object-fit:cover; filter:saturate(.82); }
+    .img-wrap:hover img { transform:scale(1.05); }
+
+    .svc { position:relative; transition:all .4s cubic-bezier(.25,.46,.45,.94); }
+    .svc::before { content:''; position:absolute; bottom:0; left:0; width:0; height:3px; background:#8b6f47; transition:width .4s cubic-bezier(.25,.46,.45,.94); }
+    .svc:hover { background:#1a1610 !important; transform:translateY(-5px); box-shadow:0 28px 60px rgba(26,22,16,.22); }
+    .svc:hover::before { width:100%; }
+    .svc:hover .s-name { color:#e2d8c8 !important; }
+    .svc:hover .s-dur  { color:#8b6f47 !important; }
+    .svc:hover .s-desc { color:#7a6f62 !important; }
+    .svc:hover .s-div  { border-color:rgba(200,184,154,.12) !important; }
+    .svc:hover .s-pl   { color:#7a6f62 !important; }
+    .svc:hover .s-pv   { color:#e2d8c8 !important; }
+    .svc:hover .s-cta  { color:#7a6f62 !important; border-color:rgba(200,184,154,.25) !important; }
+
+    .tcard { border:1px solid rgba(200,184,154,.15); transition:all .35s; }
+    .tcard:hover { border-color:#c8b89a; background:rgba(200,184,154,.04); }
+
+    .inp { font-family:'DM Sans',sans-serif; outline:none; transition:border-color .3s, background .3s; width:100%; }
+    .inp:focus { border-color:#8b6f47 !important; background:#fff !important; }
+    select.inp {
+      appearance:none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%237a6f62' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;
+      background-position: right 1rem center;
+    }
+
+    .btn-d { transition:all .35s; }
+    .btn-d:hover { background:#8b6f47 !important; transform:translateY(-2px); box-shadow:0 14px 40px rgba(139,111,71,.3); }
+
+    .reveal { opacity:0; transform:translateY(24px); transition:opacity .6s ease, transform .6s ease; }
+    .reveal.on { opacity:1; transform:translateY(0); }
+
+    .soc { border:1px solid rgba(200,184,154,.2); transition:all .3s; }
+    .soc:hover { border-color:#c8b89a; color:#c8b89a !important; }
+
+    .fl { transition:color .3s; }
+    .fl:hover { color:#c8b89a !important; }
+  </style>
+</head>
+
+<body class="bg-warm text-charcoal overflow-x-hidden">
+
+<!-- ══════════ NAVIGATION ══════════ -->
+<nav id="navbar" class="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-8 lg:px-20 py-5 bg-warm/90 backdrop-blur-xl border-b border-stone-l/30 transition-all duration-300">
+  <a href="#" class="font-display text-2xl font-light tracking-[.12em] text-deep">
+    Sere<span class="italic text-accent">nia</span>
+  </a>
+  <ul class="hidden md:flex items-center gap-10 list-none m-0 p-0">
+    <li><a href="#soins"       class="nav-lk text-[11px] font-light tracking-[.22em] uppercase text-muted no-underline">Soins</a></li>
+    <li><a href="#reservation" class="nav-lk text-[11px] font-light tracking-[.22em] uppercase text-muted no-underline">Reservation</a></li>
+    <li><a href="#temoignages" class="nav-lk text-[11px] font-light tracking-[.22em] uppercase text-muted no-underline">Avis</a></li>
+    <li><a href="#contact"     class="nav-lk text-[11px] font-light tracking-[.22em] uppercase text-muted no-underline">Contact</a></li>
+  </ul>
+  <a href="#reservation" class="btn-d hidden md:inline-block text-[11px] font-normal tracking-[.22em] uppercase px-7 py-3 bg-deep text-cream no-underline">
+    Reserver
+  </a>
+  <button id="burger" class="md:hidden bg-transparent border-none text-deep text-2xl cursor-pointer p-0">&#9776;</button>
+</nav>
+
+<!-- Menu mobile -->
+<div id="mmenu" class="hidden fixed top-[73px] inset-x-0 z-40 bg-warm/96 backdrop-blur-xl border-b border-stone-l/30 px-8 py-6 flex-col gap-5">
+  <a href="#soins"       class="text-[11px] font-light tracking-[.22em] uppercase text-muted no-underline">Soins</a>
+  <a href="#reservation" class="text-[11px] font-light tracking-[.22em] uppercase text-muted no-underline">Reservation</a>
+  <a href="#temoignages" class="text-[11px] font-light tracking-[.22em] uppercase text-muted no-underline">Avis</a>
+  <a href="#contact"     class="text-[11px] font-light tracking-[.22em] uppercase text-muted no-underline">Contact</a>
+  <a href="#reservation" class="btn-d mt-2 text-center text-[11px] font-normal tracking-[.22em] uppercase px-7 py-3 bg-deep text-cream no-underline block">Reserver</a>
+</div>
+
+
+<!-- ══════════ HERO ══════════ -->
+<section class="min-h-screen grid grid-cols-1 lg:grid-cols-2 pt-[73px]">
+
+  <div class="flex flex-col justify-center px-8 lg:pl-20 lg:pr-14 py-24 lg:py-32">
+
+    <div class="anim-up d1 flex items-center gap-3 mb-8">
+      <span class="block w-10 h-px bg-accent flex-shrink-0"></span>
+      <span class="text-[11px] font-light tracking-[.35em] uppercase text-accent">Institut Premium - Bordeaux</span>
+    </div>
+
+    <h1 class="anim-up d2 font-display font-light leading-[1.04] text-deep mb-7" style="font-size:clamp(2.9rem,5.2vw,5.6rem);">
+      L'art du<br/>
+      <em class="italic text-accent">bien-etre</em><br/>
+      absolu
+    </h1>
+
+    <p class="anim-up d3 text-sm font-light text-muted max-w-md leading-[1.95] mb-12">
+      Une experience sensorielle unique, entre tradition millenaire et techniques contemporaines. Offrez a votre corps le repos qu'il merite.
+    </p>
+
+    <div class="anim-up d4 flex flex-wrap items-center gap-6">
+      <a href="#reservation" class="btn-d text-[11px] font-normal tracking-[.22em] uppercase px-8 py-4 bg-deep text-cream inline-block no-underline">
+        Prendre rendez-vous
+      </a>
+      <a href="#soins" class="flex items-center gap-2 text-[11px] font-light tracking-[.15em] uppercase text-muted hover:text-deep transition-colors duration-300 no-underline">
+        &#8595; Nos soins
+      </a>
+    </div>
+
+    <div class="anim-up d5 flex gap-12 mt-16 pt-10 border-t border-stone-l/40">
+      <div>
+        <div class="font-display text-[2.4rem] font-light text-deep leading-none">12+</div>
+        <div class="text-[10px] font-light tracking-[.22em] uppercase text-muted mt-1">Techniques</div>
+      </div>
+      <div>
+        <div class="font-display text-[2.4rem] font-light text-deep leading-none">98%</div>
+        <div class="text-[10px] font-light tracking-[.22em] uppercase text-muted mt-1">Satisfaction</div>
+      </div>
+      <div>
+        <div class="font-display text-[2.4rem] font-light text-deep leading-none">8 ans</div>
+        <div class="text-[10px] font-light tracking-[.22em] uppercase text-muted mt-1">D'expertise</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative img-wrap hidden lg:block bg-cream">
+    <img
+      src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=1000&q=85&fit=crop"
+      alt="Seance de massage relaxante"
+    />
+    <div class="float-badge absolute bottom-12 -left-8 bg-warm px-6 py-4 flex items-center gap-3" style="box-shadow:0 24px 80px rgba(26,22,16,.14);">
+      <span class="text-2xl text-accent">&#10022;</span>
+      <div>
+        <div class="text-[10px] font-light tracking-[.18em] uppercase text-muted">Certification</div>
+        <div class="font-display text-base font-semibold text-deep">Therapeutes certifies</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ SERVICES ══════════ -->
+<section id="soins" class="bg-cream py-28 px-8 lg:px-20">
+
+  <div class="text-center mb-20">
+    <span class="text-[11px] font-light tracking-[.35em] uppercase text-accent block mb-4">Nos soins</span>
+    <h2 class="font-display font-light text-deep leading-tight" style="font-size:clamp(2rem,3.5vw,3.6rem);">
+      Chaque seance,<br/><em class="italic text-accent">une renaissance</em>
+    </h2>
+    <p class="text-sm font-light text-muted max-w-md mx-auto mt-5 leading-[1.9]">
+      Des protocoles personnalises pour repondre a vos besoins - relaxation, recuperation ou evasion sensorielle.
+    </p>
+  </div>
+
+  <div class="flex justify-center">
+    <div class="svc reveal bg-warm w-full max-w-xl p-12 flex flex-col border border-stone-l/40">
+
+      <div class="font-display text-[5rem] font-light text-stone-l leading-none mb-6">&#10022;</div>
+      <h3 class="s-name font-display text-[2rem] font-normal text-deep mb-1">Forfait Seance</h3>
+      <div class="s-dur text-[10px] font-light tracking-[.22em] uppercase text-accent mb-5">Massage - Relaxation - Bien-etre</div>
+      <p class="s-desc text-[13px] font-light text-muted leading-[1.9] mb-8">
+        Un soin personnalise selon vos besoins - relaxation profonde, recuperation musculaire ou evasion sensorielle. Chaque seance est adaptee a votre morphologie et vos attentes par nos therapeutes certifies.
+      </p>
+
+      <div class="s-div border-t border-stone-l/40 pt-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+        <div class="flex gap-10">
+          <div class="text-center">
+            <div class="s-pl text-[10px] font-light tracking-[.2em] uppercase text-muted mb-2">Adulte</div>
+            <div class="s-pv font-display text-[2.6rem] font-light text-charcoal leading-none">60€</div>
+            <div class="s-pl text-[10px] font-light tracking-[.1em] text-muted mt-1">/ seance</div>
+          </div>
+          <div class="w-px bg-stone-l/40 self-stretch"></div>
+          <div class="text-center">
+            <div class="s-pl text-[10px] font-light tracking-[.2em] uppercase text-muted mb-2">Enfant</div>
+            <div class="s-pv font-display text-[2.6rem] font-light text-charcoal leading-none">50€</div>
+            <div class="s-pl text-[10px] font-light tracking-[.1em] text-muted mt-1">/ seance</div>
+          </div>
+        </div>
+        <a href="#reservation" class="s-cta inline-block text-[11px] font-normal tracking-[.22em] uppercase px-8 py-3 bg-deep text-cream no-underline btn-d text-center">
+          Reserver
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ RESERVATION ══════════ -->
+<section id="reservation" class="bg-warm py-28 px-8 lg:px-20">
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.55fr] gap-16 lg:gap-28 items-start">
+
+    <div class="reveal">
+      <span class="text-[11px] font-light tracking-[.35em] uppercase text-accent block mb-4">Reservation</span>
+      <h2 class="font-display font-light text-deep leading-tight mb-5" style="font-size:clamp(2rem,3vw,3.2rem);">
+        Planifiez votre<br/><em class="italic text-accent">moment</em>
+      </h2>
+      <p class="text-sm font-light text-muted leading-[1.9] max-w-xs mb-10">
+        Reservez en ligne en quelques secondes. Confirmation immediate par email.
+      </p>
+
+      <ul class="flex flex-col gap-6 mb-12 list-none p-0 m-0">
+        <li class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-10 h-10 bg-cream border border-stone-l flex items-center justify-center text-sm">&#128205;</div>
+          <div>
+            <div class="text-[10px] font-light tracking-[.18em] uppercase text-muted mb-0.5">Adresse</div>
+            <div class="text-sm font-light text-charcoal">12 Allee de Chartres, Bordeaux 33000</div>
+          </div>
+        </li>
+        <li class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-10 h-10 bg-cream border border-stone-l flex items-center justify-center text-sm">&#128336;</div>
+          <div>
+            <div class="text-[10px] font-light tracking-[.18em] uppercase text-muted mb-0.5">Horaires</div>
+            <div class="text-sm font-light text-charcoal">Lun - Sam : 9h - 20h &middot; Dim : 10h - 17h</div>
+          </div>
+        </li>
+        <li class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-10 h-10 bg-cream border border-stone-l flex items-center justify-center text-sm">&#128222;</div>
+          <div>
+            <div class="text-[10px] font-light tracking-[.18em] uppercase text-muted mb-0.5">Telephone</div>
+            <div class="text-sm font-light text-charcoal">+33 (0)5 56 12 34 56</div>
+          </div>
+        </li>
+        <li class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-10 h-10 bg-cream border border-stone-l flex items-center justify-center text-sm">&#9993;</div>
+          <div>
+            <div class="text-[10px] font-light tracking-[.18em] uppercase text-muted mb-0.5">Email</div>
+            <div class="text-sm font-light text-charcoal">contact@serenia-bordeaux.fr</div>
+          </div>
+        </li>
+      </ul>
+
+      <a href="#soins" class="flex items-center gap-2 text-[11px] font-light tracking-[.15em] uppercase text-muted hover:text-deep transition-colors duration-300 no-underline w-fit">
+        &#8592; Voir nos soins
+      </a>
+    </div>
+
+    <div class="reveal bg-cream p-10 lg:p-14">
+      <h3 class="font-display text-[1.9rem] font-light text-deep mb-8">Reserver une seance</h3>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[10px] font-normal tracking-[.22em] uppercase text-muted">Prenom</label>
+          <input id="prenom" type="text" placeholder="Marie"
+            class="inp bg-warm border border-stone-l text-sm font-light text-charcoal px-4 py-3" />
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[10px] font-normal tracking-[.22em] uppercase text-muted">Nom</label>
+          <input id="nom" type="text" placeholder="Dupont"
+            class="inp bg-warm border border-stone-l text-sm font-light text-charcoal px-4 py-3" />
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[10px] font-normal tracking-[.22em] uppercase text-muted">Email</label>
+          <input id="email" type="email" placeholder="marie@exemple.fr"
+            class="inp bg-warm border border-stone-l text-sm font-light text-charcoal px-4 py-3" />
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[10px] font-normal tracking-[.22em] uppercase text-muted">Telephone</label>
+          <input id="tel" type="tel" placeholder="+33 6 00 00 00 00"
+            class="inp bg-warm border border-stone-l text-sm font-light text-charcoal px-4 py-3" />
+        </div>
+
+        <div class="flex flex-col gap-1.5 sm:col-span-2">
+          <label class="text-[10px] font-normal tracking-[.22em] uppercase text-muted">Duree souhaitee</label>
+          <select id="soin" class="inp bg-warm border border-stone-l text-sm font-light text-charcoal px-4 py-3 cursor-pointer">
+            <option value="" disabled selected>Choisir une duree</option>
+            <option>Forfait Seance - 30 min</option>
+            <option>Forfait Seance - 45 min</option>
+            <option>Forfait Seance - 60 min</option>
+            <option>Forfait Seance - 90 min</option>
+          </select>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[10px] font-normal tracking-[.22em] uppercase text-muted">Tarif</label>
+          <select id="tarif" class="inp bg-warm border border-stone-l text-sm font-light text-charcoal px-4 py-3 cursor-pointer">
+            <option value="" disabled selected>Selectionner</option>
+            <option>Adulte - 60€</option>
+            <option>Enfant - 50€</option>
+          </select>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[10px] font-normal tracking-[.22em] uppercase text-muted">Date souhaitee</label>
+          <input id="date" type="date"
+            class="inp bg-warm border border-stone-l text-sm font-light text-charcoal px-4 py-3" />
+        </div>
+
+        <div class="flex flex-col gap-1.5 sm:col-span-2">
+          <label class="text-[10px] font-normal tracking-[.22em] uppercase text-muted">Creneau horaire</label>
+          <select id="heure" class="inp bg-warm border border-stone-l text-sm font-light text-charcoal px-4 py-3 cursor-pointer">
+            <option value="" disabled selected>Choisir un creneau</option>
+            <option>09:00</option>
+            <option>10:00</option>
+            <option>11:00</option>
+            <option>12:00</option>
+            <option>14:00</option>
+            <option>15:00</option>
+            <option>16:00</option>
+            <option>17:00</option>
+            <option>18:00</option>
+            <option>19:00</option>
+          </select>
+        </div>
+
+        <div class="flex flex-col gap-1.5 sm:col-span-2">
+          <label class="text-[10px] font-normal tracking-[.22em] uppercase text-muted">
+            Informations complementaires (optionnel)
+          </label>
+          <textarea id="message" rows="3" placeholder="Allergies, preferences, contre-indications medicales..."
+            class="inp bg-warm border border-stone-l text-sm font-light text-charcoal px-4 py-3 resize-y"></textarea>
+        </div>
+      </div>
+
+      <button onclick="handleSubmit()"
+        class="btn-d mt-6 w-full text-[11px] font-normal tracking-[.28em] uppercase py-4 bg-deep text-cream border-none cursor-pointer block">
+        Confirmer la reservation
+      </button>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════ TEMOIGNAGES ══════════ -->
+<section id="temoignages" class="bg-deep py-28 px-8 lg:px-20">
+
+  <div class="text-center mb-20">
+    <span class="text-[11px] font-light tracking-[.35em] uppercase text-stone block mb-4">Temoignages</span>
+    <h2 class="font-display font-light text-cream leading-tight" style="font-size:clamp(2rem,3.5vw,3.4rem);">
+      Ce que disent<br/><em class="italic text-stone">nos clients</em>
+    </h2>
+    <p class="text-sm font-light text-stone/60 max-w-md mx-auto mt-5 leading-[1.9]">
+      Des experiences qui parlent d'elles-memes - temoignages authentiques de nos habitues.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    <div class="tcard reveal p-8">
+      <div class="text-stone tracking-widest text-sm mb-5">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="font-display text-[1.05rem] font-light italic text-stone-l/90 leading-[1.75] mb-7">
+        Une heure de pure plenitude. Le massage Deep Tissue a soulage des tensions que je portais depuis des mois. Le cadre est raffine, l'ambiance parfaite.
+      </p>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center font-display text-lg text-cream">C</div>
+        <div>
+          <div class="text-[13px] font-light text-stone-l">Camille R.</div>
+          <div class="text-[11px] font-light text-muted tracking-wider">Mars 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tcard reveal p-8">
+      <div class="text-stone tracking-widest text-sm mb-5">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="font-display text-[1.05rem] font-light italic text-stone-l/90 leading-[1.75] mb-7">
+        Le massage balinais est une experience a part entiere. Les huiles sentent divinement bon et la therapeute est d'une douceur absolue. Je reviendrai sans hesiter.
+      </p>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center font-display text-lg text-cream">A</div>
+        <div>
+          <div class="text-[13px] font-light text-stone-l">Alexandre M.</div>
+          <div class="text-[11px] font-light text-muted tracking-wider">Fevrier 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tcard reveal p-8">
+      <div class="text-stone tracking-widest text-sm mb-5">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="font-display text-[1.05rem] font-light italic text-stone-l/90 leading-[1.75] mb-7">
+        J'ai offert un forfait duo a mon mari pour notre anniversaire. Moment magique, service impeccable, accueil chaleureux. L'institut depasse toutes nos attentes.
+      </p>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center font-display text-lg text-cream">S</div>
+        <div>
+          <div class="text-[13px] font-light text-stone-l">Sophie L.</div>
+          <div class="text-[11px] font-light text-muted tracking-wider">Janvier 2025</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer id="contact" class="bg-charcoal px-8 lg:px-20 pt-20 pb-8">
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-stone-l/10 mb-8">
+
+    <div>
+      <a href="#" class="font-display text-[1.4rem] font-light tracking-[.12em] text-cream block mb-4 no-underline">
+        Sere<span class="italic text-accent">nia</span>
+      </a>
+      <p class="text-[13px] font-light text-muted leading-[1.85] max-w-[240px]">
+        Institut de massage moderne a Bordeaux. Un espace ou le temps s'arrete pour laisser place au bien-etre profond.
+      </p>
+    </div>
+
+    <div>
+      <div class="text-[10px] font-normal tracking-[.22em] uppercase text-stone mb-5">Soins</div>
+      <ul class="flex flex-col gap-3 list-none p-0 m-0">
+        <li><a href="#soins" class="fl text-[13px] font-light text-muted no-underline">Massage Suedois</a></li>
+        <li><a href="#soins" class="fl text-[13px] font-light text-muted no-underline">Deep Tissue</a></li>
+        <li><a href="#soins" class="fl text-[13px] font-light text-muted no-underline">Massage Balinais</a></li>
+        <li><a href="#soins" class="fl text-[13px] font-light text-muted no-underline">Hot Stones</a></li>
+        <li><a href="#soins" class="fl text-[13px] font-light text-muted no-underline">Massage Prenatal</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="text-[10px] font-normal tracking-[.22em] uppercase text-stone mb-5">Institut</div>
+      <ul class="flex flex-col gap-3 list-none p-0 m-0">
+        <li><a href="#" class="fl text-[13px] font-light text-muted no-underline">Notre histoire</a></li>
+        <li><a href="#" class="fl text-[13px] font-light text-muted no-underline">L'equipe</a></li>
+        <li><a href="#" class="fl text-[13px] font-light text-muted no-underline">Certifications</a></li>
+        <li><a href="#" class="fl text-[13px] font-light text-muted no-underline">Bons cadeaux</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="text-[10px] font-normal tracking-[.22em] uppercase text-stone mb-5">Contact</div>
+      <ul class="flex flex-col gap-3 list-none p-0 m-0">
+        <li><span class="text-[13px] font-light text-muted">12 Allee de Chartres</span></li>
+        <li><span class="text-[13px] font-light text-muted">33000 Bordeaux</span></li>
+        <li><a href="tel:+33556123456" class="fl text-[13px] font-light text-muted no-underline">+33 5 56 12 34 56</a></li>
+        <li><a href="mailto:contact@serenia-bordeaux.fr" class="fl text-[13px] font-light text-muted no-underline">contact@serenia-bordeaux.fr</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+    <span class="text-[11px] font-light text-muted tracking-wide">2025 Serenia - Tous droits reserves - Mentions legales</span>
+    <div class="flex gap-3">
+      <a href="#" class="soc w-9 h-9 flex items-center justify-center text-muted text-sm no-underline" aria-label="Instagram">&#10022;</a>
+      <a href="#" class="soc w-9 h-9 flex items-center justify-center text-muted text-sm no-underline" aria-label="Facebook">f</a>
+      <a href="#" class="soc w-9 h-9 flex items-center justify-center text-muted text-sm no-underline" aria-label="Pinterest">P</a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ══════════ SCRIPTS ══════════ -->
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').style.boxShadow =
+      window.scrollY > 40 ? '0 4px 40px rgba(26,22,16,.1)' : 'none';
+  });
+
+  const burger = document.getElementById('burger');
+  const mmenu  = document.getElementById('mmenu');
+  burger.addEventListener('click', () => {
+    mmenu.classList.toggle('hidden');
+    mmenu.classList.toggle('flex');
+  });
+  mmenu.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      mmenu.classList.add('hidden');
+      mmenu.classList.remove('flex');
+    });
+  });
+
+  const obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e, i) {
+      if (e.isIntersecting) {
+        setTimeout(function() { e.target.classList.add('on'); }, i * 90);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+
+  document.getElementById('date').min = new Date().toISOString().split('T')[0];
+
+  function handleSubmit() {
+    var prenom = document.getElementById('prenom').value.trim();
+    var email  = document.getElementById('email').value.trim();
+    var soin   = document.getElementById('soin').value;
+    var tarif  = document.getElementById('tarif').value;
+    var date   = document.getElementById('date').value;
+    var heure  = document.getElementById('heure').value;
+
+    if (!prenom || !email || !soin || !tarif || !date || !heure) {
+      alert('Veuillez remplir tous les champs obligatoires.');
+      return;
+    }
+
+    var d = new Date(date);
+    var dateStr = d.toLocaleDateString('fr-FR', {
+      weekday:'long', day:'numeric', month:'long', year:'numeric'
+    });
+
+    alert('Reservation confirmee !\n\nBonjour ' + prenom + ',\n' + soin + ' (' + tarif + ')\nle ' + dateStr + ' a ' + heure + '.\n\nConfirmation envoyee a ' + email + '.');
+  }
+</script>
+
+</body>
+</html>
