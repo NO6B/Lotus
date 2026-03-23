@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Serenia - Dashboard Admin</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: #f5f0e8;
+      color: #2c2820;
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 220px;
+      min-width: 220px;
+      min-height: 100vh;
+      background: #1a1610;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      overflow-y: auto;
+      z-index: 50;
+    }
+    .sidebar-logo { padding: 1.8rem 1.6rem; border-bottom: 1px solid rgba(200,184,154,.1); }
+    .sidebar-logo a { font-family: var(--font-display); font-size: 1.3rem; font-weight: 300; letter-spacing: .12em; color: #f5f0e8; text-decoration: none; display: block; }
+    .sidebar-logo span { font-style: italic; color: #8b6f47; }
+    .sidebar-label { font-size: 10px; font-weight: 300; letter-spacing: .2em; text-transform: uppercase; color: #7a6f62; margin-top: .3rem; }
+    .sidebar-nav { flex: 1; padding: 1.2rem 0; }
+    .sidebar-section { font-size: 10px; font-weight: 400; letter-spacing: .22em; text-transform: uppercase; color: #7a6f62; padding: .8rem 1.6rem .4rem; }
+    .sidebar-link { display: flex; align-items: center; gap: .8rem; padding: .7rem 1.6rem; font-size: 13px; font-weight: 300; color: #7a6f62; text-decoration: none; transition: all .25s; border-left: 2px solid transparent; }
+    .sidebar-link:hover { color: #e2d8c8; background: rgba(200,184,154,.05); }
+    .sidebar-link.active { color: #e2d8c8; border-left-color: #8b6f47; background: rgba(139,111,71,.08); }
+    .sidebar-icon { font-size: .85rem; width: 16px; text-align: center; flex-shrink: 0; }
+    .sidebar-footer { padding: 1.2rem 1.6rem; border-top: 1px solid rgba(200,184,154,.1); }
+    .sidebar-footer a { font-size: 12px; font-weight: 300; color: #7a6f62; text-decoration: none; letter-spacing: .1em; transition: color .25s; }
+    .sidebar-footer a:hover { color: #c8b89a; }
+
+    /* ── MAIN ── */
+    .main { margin-left: 220px; flex: 1; min-width: 0; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* ── TOPBAR ── */
+    .topbar { background: rgba(250,248,244,.96); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(200,184,154,.3); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+    .topbar-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 300; color: #1a1610; }
+    .topbar-right { display: flex; align-items: center; gap: 1rem; }
+    .topbar-date { font-size: 12px; font-weight: 300; color: #7a6f62; letter-spacing: .05em; }
+    .topbar-avatar { width: 34px; height: 34px; border-radius: 50%; background: #8b6f47; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: .95rem; color: #f5f0e8; flex-shrink: 0; }
+
+    /* ── CONTENT ── */
+    .content { padding: 2rem; flex: 1; }
+
+    /* ── STATS ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: #faf8f4; border: 1px solid #e2d8c8; padding: 1.5rem; transition: transform .3s, box-shadow .3s; }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(26,22,16,.08); }
+    .stat-card-accent { border-top: 3px solid #8b6f47; }
+    .stat-card-label { font-size: 10px; font-weight: 400; letter-spacing: .22em; text-transform: uppercase; color: #7a6f62; margin-bottom: .6rem; }
+    .stat-card-value { font-family: var(--font-display); font-size: 2.6rem; font-weight: 300; color: #1a1610; line-height: 1; margin-bottom: .3rem; }
+    .stat-card-sub { font-size: 11px; font-weight: 300; color: #7a6f62; }
+
+    /* ── SECTION BLOCK ── */
+    .section-block { background: #faf8f4; border: 1px solid #e2d8c8; margin-bottom: 1.5rem; }
+    .section-block-header { padding: 1.2rem 1.8rem; border-bottom: 1px solid #e2d8c8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .8rem; }
+    .section-block-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 300; color: #1a1610; }
+    .section-block-badge { font-size: 11px; font-weight: 400; letter-spacing: .1em; padding: .25rem .8rem; background: rgba(139,111,71,.1); color: #8b6f47; }
+
+    /* ── CALENDRIER ── */
+    .cal-nav { display: flex; align-items: center; gap: 1rem; }
+    .cal-nav-btn { font-family: var(--font-body); font-size: 11px; font-weight: 400; letter-spacing: .15em; text-transform: uppercase; padding: .4rem 1rem; border: 1px solid #e2d8c8; background: transparent; color: #7a6f62; cursor: pointer; transition: all .25s; }
+    .cal-nav-btn:hover { border-color: #8b6f47; color: #8b6f47; }
+    .cal-week-label { font-size: 12px; font-weight: 300; color: #2c2820; letter-spacing: .05em; min-width: 180px; text-align: center; }
+
+    .cal-legend { display: flex; gap: 1.2rem; align-items: center; padding: .8rem 1.8rem; border-bottom: 1px solid #e2d8c8; background: #faf8f4; flex-wrap: wrap; }
+    .cal-legend-item { display: flex; align-items: center; gap: .4rem; font-size: 11px; font-weight: 300; color: #7a6f62; }
+    .cal-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .dot-libre   { background: #c8e6c9; border: 1px solid #81c784; }
+    .dot-reserve { background: #fff3cd; border: 1px solid #ffc107; }
+    .dot-confirme{ background: #d4edda; border: 1px solid #28a745; }
+    .dot-bloque  { background: #f5c6cb; border: 1px solid #dc3545; }
+
+    .cal-wrapper { overflow-x: auto; }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: 60px repeat(7, 1fr);
+      min-width: 700px;
+    }
+
+    /* En-tetes jours */
+    .cal-header-empty { background: #f5f0e8; border-right: 1px solid #e2d8c8; border-bottom: 1px solid #e2d8c8; }
+    .cal-day-header {
+      padding: .8rem .4rem;
+      text-align: center;
+      border-right: 1px solid #e2d8c8;
+      border-bottom: 2px solid #e2d8c8;
+      background: #f5f0e8;
+    }
+    .cal-day-name { font-size: 10px; font-weight: 400; letter-spacing: .18em; text-transform: uppercase; color: #7a6f62; }
+    .cal-day-num { font-family: var(--font-display); font-size: 1.4rem; font-weight: 300; color: #1a1610; line-height: 1.1; margin-top: .1rem; }
+    .cal-day-header.today .cal-day-num { color: #8b6f47; }
+    .cal-day-header.today { border-bottom-color: #8b6f47; }
+
+    /* Cellule heure */
+    .cal-time-cell {
+      padding: 0 .5rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      border-right: 1px solid #e2d8c8;
+      border-bottom: 1px solid rgba(226,216,200,.4);
+      background: #f5f0e8;
+      height: 52px;
+    }
+    .cal-time-label { font-size: 10px; font-weight: 300; color: #7a6f62; letter-spacing: .05em; }
+
+    /* Cellule créneau */
+    .cal-slot {
+      height: 52px;
+      border-right: 1px solid #e2d8c8;
+      border-bottom: 1px solid rgba(226,216,200,.4);
+      cursor: pointer;
+      transition: all .2s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #faf8f4;
+    }
+    .cal-slot:hover { filter: brightness(.95); }
+    .cal-slot:last-child { border-right: none; }
+
+    .cal-slot.libre   { background: #f0faf0; }
+    .cal-slot.libre:hover { background: #e0f5e0; }
+    .cal-slot.bloque  { background: #fff0f0; cursor: default; }
+    .cal-slot.reserve { background: #fffbeb; cursor: default; }
+    .cal-slot.confirme{ background: #f0fff4; cursor: default; }
+    .cal-slot.passe   { background: #f9f9f9; cursor: default; opacity: .6; }
+
+    .cal-slot-label {
+      font-size: 10px;
+      font-weight: 400;
+      text-align: center;
+      padding: .2rem;
+      line-height: 1.3;
+      color: #2c2820;
+      pointer-events: none;
+    }
+    .cal-slot.libre .cal-slot-label   { color: #2d7a45; }
+    .cal-slot.bloque .cal-slot-label  { color: #a03030; }
+    .cal-slot.reserve .cal-slot-label { color: #a07020; }
+    .cal-slot.confirme .cal-slot-label{ color: #1a6b35; }
+
+    /* Tooltip action */
+    .cal-slot-actions {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 20;
+      background: #1a1610;
+      padding: .3rem .6rem;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .cal-slot:hover .cal-slot-actions { display: block; }
+    .cal-slot-actions span { font-size: 10px; color: #f5f0e8; letter-spacing: .1em; }
+
+    /* ── TABLE RDV ── */
+    table { width: 100%; border-collapse: collapse; }
+    thead th { font-size: 10px; font-weight: 400; letter-spacing: .22em; text-transform: uppercase; color: #7a6f62; padding: .9rem 1.8rem; text-align: left; border-bottom: 1px solid #e2d8c8; background: #f5f0e8; }
+    tbody tr { border-bottom: 1px solid rgba(226,216,200,.5); transition: background .2s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(200,184,154,.06); }
+    tbody td { padding: 1rem 1.8rem; font-size: 13px; font-weight: 300; color: #2c2820; vertical-align: middle; }
+    .td-name { font-weight: 400; color: #1a1610; }
+    .td-sub  { font-size: 12px; color: #7a6f62; }
+    .td-date { font-family: var(--font-display); font-size: 1rem; }
+
+    .badge { display: inline-block; font-size: 10px; font-weight: 400; letter-spacing: .12em; text-transform: uppercase; padding: .25rem .7rem; }
+    .badge-attente  { background: rgba(200,156,50,.12); color: #a07020; }
+    .badge-confirme { background: rgba(60,140,80,.12);  color: #2d7a45; }
+    .badge-annule   { background: rgba(180,60,60,.12);  color: #a03030; }
+
+    .btn-action { font-size: 11px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; padding: .35rem .9rem; border: 1px solid #e2d8c8; background: transparent; color: #7a6f62; cursor: pointer; transition: all .25s; margin-right: .3rem; }
+    .btn-action:hover { border-color: #8b6f47; color: #8b6f47; }
+    .btn-action.confirm { background: #1a1610; color: #f5f0e8; border-color: #1a1610; }
+    .btn-action.confirm:hover { background: #8b6f47; border-color: #8b6f47; }
+    .btn-action.danger { border-color: #c87070; color: #c87070; }
+    .btn-action.danger:hover { background: #c87070; color: #fff; }
+
+    /* ── CLIENTS ── */
+    .clients-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #e2d8c8; }
+    .client-card { background: #faf8f4; padding: 1.2rem 1.8rem; display: flex; align-items: center; gap: 1rem; transition: background .25s; }
+    .client-card:hover { background: #f5f0e8; }
+    .client-avatar { width: 38px; height: 38px; border-radius: 50%; background: #8b6f47; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1rem; color: #f5f0e8; flex-shrink: 0; }
+    .client-name  { font-size: 13px; font-weight: 400; color: #1a1610; }
+    .client-email { font-size: 11px; font-weight: 300; color: #7a6f62; margin-top: .15rem; }
+    .client-tel   { font-size: 10px; font-weight: 300; color: #c8b89a; margin-top: .15rem; }
+
+    .empty-state { padding: 3rem 2rem; text-align: center; color: #7a6f62; font-size: 13px; font-weight: 300; }
+    .empty-icon { font-size: 1.8rem; margin-bottom: .6rem; opacity: .3; }
+
+    /* ── MODAL ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(26,22,16,.5); z-index: 100; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: #faf8f4; border: 1px solid #e2d8c8; padding: 2.5rem; max-width: 380px; width: 90%; }
+    .modal-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 300; color: #1a1610; margin-bottom: .5rem; }
+    .modal-subtitle { font-size: 12px; font-weight: 300; color: #7a6f62; margin-bottom: 2rem; letter-spacing: .05em; }
+    .modal-actions { display: flex; gap: .8rem; flex-wrap: wrap; }
+    .modal-btn { font-family: var(--font-body); font-size: 11px; font-weight: 400; letter-spacing: .18em; text-transform: uppercase; padding: .8rem 1.4rem; border: none; cursor: pointer; transition: all .25s; flex: 1; }
+    .modal-btn-libre   { background: #1a1610; color: #f5f0e8; }
+    .modal-btn-libre:hover { background: #2d7a45; }
+    .modal-btn-bloque  { background: #c87070; color: #fff; }
+    .modal-btn-bloque:hover { background: #a03030; }
+    .modal-btn-cancel  { background: transparent; border: 1px solid #e2d8c8; color: #7a6f62; }
+    .modal-btn-cancel:hover { border-color: #8b6f47; color: #8b6f47; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1100px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .clients-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .clients-grid { grid-template-columns: 1fr; }
+      .content { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <a href="/">Sere<span>nia</span></a>
+    <div class="sidebar-label">Administration</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">Principal</div>
+    <a href="/admin/dashboard" class="sidebar-link active">
+      <span class="sidebar-icon">&#9632;</span> Dashboard
+    </a>
+    <a href="#" class="sidebar-link">
+      <span class="sidebar-icon">&#9679;</span> Rendez-vous
+    </a>
+    <a href="#" class="sidebar-link">
+      <span class="sidebar-icon">&#9650;</span> Clients
+    </a>
+    <a href="#" class="sidebar-link">
+      <span class="sidebar-icon">&#9993;</span> Messages
+    </a>
+    <div class="sidebar-section" style="margin-top:1rem;">Parametres</div>
+    <a href="#" class="sidebar-link">
+      <span class="sidebar-icon">&#9881;</span> Parametres
+    </a>
+    <a href="/" class="sidebar-link">
+      <span class="sidebar-icon">&#8962;</span> Voir le site
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="/admin/logout">&#8592; Deconnexion</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="topbar">
+    <div class="topbar-title">Dashboard</div>
+    <div class="topbar-right">
+      <div class="topbar-date" id="topbar-date"></div>
+      <div class="topbar-avatar">A</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card stat-card-accent">
+        <div class="stat-card-label">En attente</div>
+        <div class="stat-card-value">{{ rdv_en_attente | length }}</div>
+        <div class="stat-card-sub">Rendez-vous a confirmer</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Confirmes</div>
+        <div class="stat-card-value">{{ rdv_confirmes | length }}</div>
+        <div class="stat-card-sub">Rendez-vous valides</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Clients</div>
+        <div class="stat-card-value">{{ clients | length }}</div>
+        <div class="stat-card-sub">Clients enregistres</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Total RDV</div>
+        <div class="stat-card-value">{{ (rdv_en_attente | length) + (rdv_confirmes | length) }}</div>
+        <div class="stat-card-sub">Tous statuts confondus</div>
+      </div>
+    </div>
+
+    <!-- CALENDRIER SEMAINE -->
+    <div class="section-block">
+      <div class="section-block-header">
+        <div class="section-block-title">Planning de la semaine</div>
+        <div class="cal-nav">
+          <button class="cal-nav-btn" onclick="changerSemaine(-1)">&#8592; Prev</button>
+          <div class="cal-week-label" id="cal-week-label"></div>
+          <button class="cal-nav-btn" onclick="changerSemaine(1)">Suiv &#8594;</button>
+        </div>
+      </div>
+
+      <div class="cal-legend">
+        <div class="cal-legend-item"><div class="cal-legend-dot dot-libre"></div> Libre</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot dot-reserve"></div> En attente</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot dot-confirme"></div> Confirme</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot dot-bloque"></div> Bloque</div>
+        <div style="margin-left:auto; font-size:11px; font-weight:300; color:#7a6f62;">
+          Cliquez sur un creneau libre pour le bloquer / debloquer
+        </div>
+      </div>
+
+      <div class="cal-wrapper">
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+    </div>
+
+    <!-- RDV en attente -->
+    <div class="section-block">
+      <div class="section-block-header">
+        <div class="section-block-title">Rendez-vous en attente</div>
+        <span class="section-block-badge">{{ rdv_en_attente | length }} en attente</span>
+      </div>
+      {% if rdv_en_attente %}
+      <table>
+        <thead>
+          <tr>
+            <th>Client</th>
+            <th>Date et Heure</th>
+            <th>Duree</th>
+            <th>Tarif</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for rdv in rdv_en_attente %}
+          <tr>
+            <td>
+              <div class="td-name">{{ rdv.client.prenom }} {{ rdv.client.nom }}</div>
+              <div class="td-sub">{{ rdv.client.email }}</div>
+            </td>
+            <td class="td-date">{{ rdv.date_heure.strftime('%d %b %Y - %H:%M') }}</td>
+            <td>{{ rdv.duree }} min</td>
+            <td>{{ rdv.tarif }}</td>
+            <td><span class="badge badge-attente">En attente</span></td>
+            <td>
+              <button class="btn-action confirm" onclick="confirmerRdv({{ rdv.id }})">Confirmer</button>
+              <button class="btn-action danger"  onclick="annulerRdv({{ rdv.id }})">Annuler</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">&#9711;</div>
+        Aucun rendez-vous en attente
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- RDV confirmes -->
+    <div class="section-block">
+      <div class="section-block-header">
+        <div class="section-block-title">Rendez-vous confirmes</div>
+        <span class="section-block-badge">{{ rdv_confirmes | length }} confirmes</span>
+      </div>
+      {% if rdv_confirmes %}
+      <table>
+        <thead>
+          <tr>
+            <th>Client</th>
+            <th>Date et Heure</th>
+            <th>Duree</th>
+            <th>Tarif</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for rdv in rdv_confirmes %}
+          <tr>
+            <td>
+              <div class="td-name">{{ rdv.client.prenom }} {{ rdv.client.nom }}</div>
+              <div class="td-sub">{{ rdv.client.email }}</div>
+            </td>
+            <td class="td-date">{{ rdv.date_heure.strftime('%d %b %Y - %H:%M') }}</td>
+            <td>{{ rdv.duree }} min</td>
+            <td>{{ rdv.tarif }}</td>
+            <td><span class="badge badge-confirme">Confirme</span></td>
+            <td>
+              <button class="btn-action danger" onclick="annulerRdv({{ rdv.id }})">Annuler</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">&#9711;</div>
+        Aucun rendez-vous confirme
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Clients -->
+    <div class="section-block">
+      <div class="section-block-header">
+        <div class="section-block-title">Tous les clients</div>
+        <span class="section-block-badge">{{ clients | length }} clients</span>
+      </div>
+      {% if clients %}
+      <div class="clients-grid">
+        {% for client in clients %}
+        <div class="client-card">
+          <div class="client-avatar">{{ client.prenom[0] | upper }}</div>
+          <div>
+            <div class="client-name">{{ client.prenom }} {{ client.nom }}</div>
+            <div class="client-email">{{ client.email }}</div>
+            <div class="client-tel">{{ client.telephone }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">&#9711;</div>
+        Aucun client enregistre
+      </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL CRENEAU -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Creneau</div>
+    <div class="modal-subtitle" id="modal-subtitle"></div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-libre"  id="modal-btn-libre"  onclick="actionCreneau('libre')">Marquer libre</button>
+      <button class="modal-btn modal-btn-bloque" id="modal-btn-bloque" onclick="actionCreneau('bloque')">Bloquer</button>
+      <button class="modal-btn modal-btn-cancel" onclick="fermerModal()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── DATE ──
+  var now = new Date();
+  document.getElementById('topbar-date').textContent = now.toLocaleDateString('fr-FR', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  });
+
+  // ── CALENDRIER ──
+  var HEURES = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'];
+  var JOURS_COURTS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  var offsetSemaine = 0;
+  var creneaux = {}; // cle: "YYYY-MM-DD_HH:MM" -> statut
+
+  // Charger depuis le serveur les creneaux bloques
+  // En production: fetch('/api/creneaux') pour recuperer les donnees reelles
+  // Pour l'instant on simule avec localStorage
+  try {
+    var stored = localStorage.getItem('creneaux_serenia');
+    if (stored) creneaux = JSON.parse(stored);
+  } catch(e) {}
+
+  // RDV depuis Flask (injectes en JSON)
+  var rdvData = [
+    {% for rdv in rdv_en_attente %}
+    { date: "{{ rdv.date_heure.strftime('%Y-%m-%d') }}", heure: "{{ rdv.date_heure.strftime('%H:%M') }}", statut: "reserve", nom: "{{ rdv.client.prenom }} {{ rdv.client.nom }}" },
+    {% endfor %}
+    {% for rdv in rdv_confirmes %}
+    { date: "{{ rdv.date_heure.strftime('%Y-%m-%d') }}", heure: "{{ rdv.date_heure.strftime('%H:%M') }}", statut: "confirme", nom: "{{ rdv.client.prenom }} {{ rdv.client.nom }}" },
+    {% endfor %}
+  ];
+
+  // Marquer les rdv dans la grille
+  rdvData.forEach(function(rdv) {
+    creneaux[rdv.date + '_' + rdv.heure] = { statut: rdv.statut, nom: rdv.nom };
+  });
+
+  function getLundiSemaine(offset) {
+    var d = new Date();
+    var jour = d.getDay();
+    var diff = (jour === 0) ? -6 : 1 - jour;
+    d.setDate(d.getDate() + diff + offset * 7);
+    d.setHours(0,0,0,0);
+    return d;
+  }
+
+  function formatDate(d) {
+    return d.getFullYear() + '-' +
+      String(d.getMonth()+1).padStart(2,'0') + '-' +
+      String(d.getDate()).padStart(2,'0');
+  }
+
+  function formatDateFr(d) {
+    return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
+  }
+
+  function construireCalendrier() {
+    var lundi = getLundiSemaine(offsetSemaine);
+    var dimanche = new Date(lundi);
+    dimanche.setDate(dimanche.getDate() + 6);
+
+    document.getElementById('cal-week-label').textContent =
+      formatDateFr(lundi) + ' — ' + formatDateFr(dimanche);
+
+    var grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+
+    var today = formatDate(new Date());
+
+    // En-tetes
+    var emptyHeader = document.createElement('div');
+    emptyHeader.className = 'cal-header-empty cal-time-cell';
+    emptyHeader.style.height = '52px';
+    grid.appendChild(emptyHeader);
+
+    var jours = [];
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(lundi);
+      d.setDate(d.getDate() + i);
+      jours.push(d);
+
+      var header = document.createElement('div');
+      header.className = 'cal-day-header' + (formatDate(d) === today ? ' today' : '');
+      header.innerHTML =
+        '<div class="cal-day-name">' + JOURS_COURTS[i] + '</div>' +
+        '<div class="cal-day-num">' + d.getDate() + '</div>';
+      grid.appendChild(header);
+    }
+
+    // Lignes heures
+    var nowTs = new Date();
+    HEURES.forEach(function(heure) {
+      // Cellule heure
+      var timeCell = document.createElement('div');
+      timeCell.className = 'cal-time-cell';
+      timeCell.innerHTML = '<span class="cal-time-label">' + heure + '</span>';
+      grid.appendChild(timeCell);
+
+      // Cellules jours
+      jours.forEach(function(jour) {
+        var dateStr = formatDate(jour);
+        var cle = dateStr + '_' + heure;
+        var info = creneaux[cle];
+        var statut = info ? info.statut : 'vide';
+
+        // Verifier si passe
+        var slotDate = new Date(dateStr + 'T' + heure + ':00');
+        var estPasse = slotDate < nowTs;
+
+        var slot = document.createElement('div');
+        slot.className = 'cal-slot ' + (estPasse ? 'passe' : (statut === 'vide' ? '' : statut));
+        slot.dataset.cle = cle;
+        slot.dataset.date = dateStr;
+        slot.dataset.heure = heure;
+
+        var label = '';
+        if (statut === 'libre') label = '✓';
+        else if (statut === 'bloque') label = '✕';
+        else if (statut === 'reserve') label = info.nom ? info.nom.split(' ')[0] : 'RDV';
+        else if (statut === 'confirme') label = info.nom ? info.nom.split(' ')[0] : 'OK';
+
+        slot.innerHTML = '<span class="cal-slot-label">' + label + '</span>';
+
+        if (!estPasse && statut !== 'reserve' && statut !== 'confirme') {
+          slot.addEventListener('click', function() {
+            ouvrirModal(this.dataset.cle, this.dataset.date, this.dataset.heure, statut);
+          });
+          if (statut === 'vide' || statut === 'libre') {
+            slot.innerHTML += '<div class="cal-slot-actions"><span>' +
+              (statut === 'libre' ? 'Bloquer' : 'Liberer') + '</span></div>';
+          }
+        }
+
+        grid.appendChild(slot);
+      });
+    });
+  }
+
+  function changerSemaine(dir) {
+    offsetSemaine += dir;
+    construireCalendrier();
+  }
+
+  // ── MODAL ──
+  var modalCle = null;
+
+  function ouvrirModal(cle, date, heure, statutActuel) {
+    modalCle = cle;
+    var d = new Date(date);
+    var dateFr = d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
+    document.getElementById('modal-title').textContent = dateFr + ' a ' + heure;
+    document.getElementById('modal-subtitle').textContent =
+      'Statut actuel : ' + (statutActuel === 'vide' ? 'Non configure' : statutActuel);
+
+    var btnLibre = document.getElementById('modal-btn-libre');
+    var btnBloque = document.getElementById('modal-btn-bloque');
+
+    if (statutActuel === 'libre') {
+      btnLibre.style.display = 'none';
+      btnBloque.style.display = '';
+    } else if (statutActuel === 'bloque') {
+      btnLibre.style.display = '';
+      btnBloque.style.display = 'none';
+    } else {
+      btnLibre.style.display = '';
+      btnBloque.style.display = '';
+    }
+
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function fermerModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    modalCle = null;
+  }
+
+  function actionCreneau(nouveauStatut) {
+    if (!modalCle) return;
+
+    if (nouveauStatut === 'libre') {
+      creneaux[modalCle] = { statut: 'libre' };
+    } else if (nouveauStatut === 'bloque') {
+      creneaux[modalCle] = { statut: 'bloque' };
+    }
+
+    // Sauvegarder
+    try { localStorage.setItem('creneaux_serenia', JSON.stringify(creneaux)); } catch(e) {}
+
+    // En production: envoyer au serveur
+    // fetch('/admin/creneau', { method:'POST', body: JSON.stringify({ cle: modalCle, statut: nouveauStatut }) })
+
+    fermerModal();
+    construireCalendrier();
+  }
+
+  // Fermer modal en cliquant dehors
+  document.getElementById('modal-overlay').addEventListener('click', function(e) {
+    if (e.target === this) fermerModal();
+  });
+
+  // ── RDV ACTIONS ──
+  function confirmerRdv(id) {
+    if (confirm('Confirmer ce rendez-vous ?')) {
+      window.location.href = '/admin/rdv/' + id + '/confirmer';
+    }
+  }
+  function annulerRdv(id) {
+    if (confirm('Annuler ce rendez-vous ?')) {
+      window.location.href = '/admin/rdv/' + id + '/annuler';
+    }
+  }
+
+  construireCalendrier();
+</script>
+
+</body>
+</html>
