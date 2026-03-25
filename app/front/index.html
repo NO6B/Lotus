@@ -3,29 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Institut de Massage - Réservation</title>
+  <title>Lotus - Reservation</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='pico.min.css') }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <main class="container">
     <nav>
-      <ul><li><strong>Massage</strong></li></ul>
-      <ul>
-        <li><a href="#soins" class="secondary">Soins</a></li>
-        <li><a href="#reservation" role="button">Réserver</a></li>
-      </ul>
+      <ul><li><strong>Lotus Massage</strong></li></ul>
     </nav>
-
-    <header style="padding: 2rem 0; text-align: center;">
-      <h1>Massage énergétique chinois</h1>
-    </header>
 
     <section id="reservation">
       <article>
-        <h2>Réserver une séance</h2>
+        <h2>Choisissez votre créneau</h2>
+        
+        <div class="grid">
+          <div></div>
+          <div style="text-align: right; margin-bottom: 1rem;">
+            <button class="outline secondary" onclick="changerSemaine(-1)">Précédent</button>
+            <span id="cal-week-label" style="margin: 0 1rem; font-weight: bold;"></span>
+            <button class="outline secondary" onclick="changerSemaine(1)">Suivant</button>
+          </div>
+        </div>
+
+        <div id="booking-grid" class="cal-grid"></div>
+
+        <hr>
+
         <form method="POST" action="/">
+          <div id="selection-info" style="margin-bottom: 1rem; color: #2ecc71; font-weight: bold;">
+            Veuillez sélectionner un créneau dans le planning ci-dessus.
+          </div>
+          
+          <input type="hidden" id="date" name="date" required>
+          <input type="hidden" id="heure" name="heure" required>
+
           <div class="grid">
             <label>Prénom <input type="text" name="prenom" required></label>
             <label>Nom <input type="text" name="nom" required></label>
@@ -35,25 +47,16 @@
             <label>Téléphone <input type="tel" name="tel" required></label>
           </div>
 
-          <label for="date">Date souhaitée</label>
-          <input type="text" id="date" name="date" placeholder="Choisir une date..." readonly required>
+          <label>Message (facultatif)
+            <textarea name="message" rows="2"></textarea>
+          </label>
 
-          <div id="slot-section" style="display: none; margin-top: 1rem;">
-            <label>Créneaux disponibles</label>
-            <div id="slot-grid" class="slot-grid"></div>
-            <input type="hidden" id="heure" name="heure" required>
-          </div>
-
-          <label for="message" style="margin-top: 1rem;">Message ou précisions (facultatif)</label>
-          <textarea id="message" name="message" rows="3" placeholder="Ex: Douleurs au dos, allergies..."></textarea>
-
-          <button type="submit">Confirmer la réservation</button>
+          <button type="submit" id="btn-submit" disabled>Confirmer la réservation</button>
         </form>
       </article>
     </section>
   </main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
   <script src="{{ url_for('static', filename='JS/booking.js') }}"></script>
 </body>
 </html>

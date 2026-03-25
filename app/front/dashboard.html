@@ -2,7 +2,7 @@
 <html lang="fr" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <title>Lotus - Dashboard Admin</title>
+  <title>Lotus Admin - Dashboard</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='pico.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
@@ -11,50 +11,31 @@
     <nav>
       <ul><li><strong>Lotus Admin</strong></li></ul>
       <ul>
-        <li><a href="/admin/dashboard" class="secondary">Dashboard</a></li>
+        <li><a href="/" class="secondary">Voir le site</a></li>
         <li><a href="/admin/logout" role="button" class="outline">Déconnexion</a></li>
       </ul>
     </nav>
 
-    <div class="grid">
-      <article><header>En attente</header><h2>{{ rdv_en_attente | length }}</h2></article>
-      <article><header>Confirmés</header><h2>{{ rdv_confirmes | length }}</h2></article>
-      <article><header>Clients</header><h2>{{ clients | length }}</h2></article>
-    </div>
-
     <section>
-      <h2>Messages des clients</h2>
-      <figure>
-        <table role="grid">
-          <thead>
-            <tr><th>Client</th><th>Message</th><th>Date</th></tr>
-          </thead>
-          <tbody>
-            {% for msg in messages %}
-            <tr>
-              <td><strong>{{ msg.client.prenom }} {{ msg.client.nom }}</strong></td>
-              <td>{{ msg.contenu }}</td>
-              <td><small>{{ msg.date_envoi.strftime('%d/%m/%Y %H:%M') }}</small></td>
-            </tr>
-            {% endfor %}
-            {% if not messages %}
-            <tr><td colspan="3"><em>Aucun message pour l'instant.</em></td></tr>
-            {% endif %}
-          </tbody>
-        </table>
-      </figure>
+      <div class="grid">
+        <article><header>En attente</header><h2>{{ rdv_en_attente | length }}</h2></article>
+        <article><header>Confirmés</header><h2>{{ rdv_confirmes | length }}</h2></article>
+        <article><header>Clients</header><h2>{{ clients | length }}</h2></article>
+      </div>
     </section>
 
     <section>
       <div class="grid">
-        <h2>Planning</h2>
+        <h2>Planning hebdomadaire</h2>
         <div style="text-align: right;">
-          <button class="outline secondary" onclick="changerSemaine(-1)">◀ Précédent</button>
-          <span id="cal-week-label" style="margin: 0 1rem;"></span>
-          <button class="outline secondary" onclick="changerSemaine(1)">Suivant ▶</button>
+          <button class="outline secondary" onclick="changerSemaine(-1)">Précédent</button>
+          <span id="cal-week-label" style="margin: 0 1rem; font-weight: bold;"></span>
+          <button class="outline secondary" onclick="changerSemaine(1)">Suivant</button>
         </div>
       </div>
-      <article><div id="cal-grid" class="cal-grid"></div></article>
+      <article>
+        <div id="cal-grid" class="cal-grid"></div>
+      </article>
     </section>
   </main>
 
@@ -64,10 +45,12 @@
         <button aria-label="Close" rel="prev" onclick="document.getElementById('modal-creneau').removeAttribute('open')"></button>
         <p><strong>Détails du créneau</strong></p>
       </header>
-      <div id="modal-subtitle"></div>
-      <div id="modal-admin-actions" class="grid" style="margin-top: 1rem; display: none;">
-        <button onclick="document.getElementById('modal-creneau').removeAttribute('open')">Fermer</button>
-      </div>
+      <div id="modal-subtitle">
+        </div>
+      <footer id="modal-admin-actions" class="grid" style="margin-top: 1rem; display: none;">
+        <button onclick="actionCreneau('libre')">Libérer / Annuler</button>
+        <button class="secondary" onclick="actionCreneau('bloque')">Bloquer</button>
+      </footer>
     </article>
   </dialog>
 

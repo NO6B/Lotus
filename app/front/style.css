@@ -1,31 +1,101 @@
+/* Structure de la grille (Heure + 7 jours) */
 .cal-grid {
     display: grid;
     grid-template-columns: 80px repeat(7, 1fr);
-    gap: 5px;
+    gap: 8px;
     text-align: center;
+    margin-top: 1rem;
 }
 
+/* Style de base des cases */
 .cal-slot {
-    padding: 10px;
-    border-radius: 4px;
+    padding: 12px 5px;
+    border-radius: 6px;
     font-size: 0.8rem;
     cursor: default;
-    transition: 0.2s;
+    transition: all 0.2s ease-in-out;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 45px;
 }
 
-/* Créneau libre */
+/* --- ÉTATS DES CRÉNEAUX --- */
+
+/* Créneau libre (disponible) */
 .cal-slot.libre {
-    background: #f0f4f8;
-    color: #94a3b8;
+    background-color: #f0f4f8;
+    color: #475569;
+    border: 1px dashed #cbd5e1;
+    cursor: pointer;
 }
 
-/* Créneau occupé par un client */
+.cal-slot.libre:hover {
+    background-color: #e2e8f0;
+    transform: scale(1.02);
+    border-style: solid;
+}
+
+/* Créneau sélectionné par le client (avant validation) */
+.cal-slot.libre.selected {
+    background-color: #22c55e !important; /* Vert Lotus */
+    color: white !important;
+    font-weight: bold;
+    border: 1px solid #16a34a;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+}
+
+/* Créneau occupé par un RDV client */
 .cal-slot.occupe {
-    background: #fee2e2;
+    background-color: #fee2e2;
     color: #ef4444;
     font-weight: bold;
     border: 1px solid #fecaca;
+    cursor: not-allowed;
 }
 
-/* Style des boutons de changement de semaine */
-.grid h2 { margin-bottom: 0; }
+/* Créneau bloqué par l'admin (Indisponible) */
+.cal-slot.bloque {
+    background-color: #f1f5f9;
+    color: #94a3b8;
+    text-decoration: line-through;
+    border: 1px solid #e2e8f0;
+    cursor: not-allowed;
+}
+
+/* --- MISE EN PAGE --- */
+
+/* En-têtes (Jours et Heures) */
+.cal-grid div strong {
+    color: var(--primary);
+    display: block;
+}
+
+.cal-grid div small {
+    color: #64748b;
+    font-weight: bold;
+}
+
+/* Ajustement pour le titre du planning */
+.grid h2 { 
+    margin-bottom: 0; 
+}
+
+/* Style pour la zone d'info sous le planning (Index) */
+#selection-info {
+    padding: 10px;
+    border-radius: 4px;
+    background: #f8fafc;
+    border-left: 4px solid #22c55e;
+    margin-bottom: 1.5rem;
+}
+
+/* Responsive : scroll horizontal sur mobile pour ne pas écraser la grille */
+@media (max-width: 768px) {
+    .cal-grid {
+        overflow-x: auto;
+        display: grid;
+        grid-template-columns: 60px repeat(7, 120px);
+    }
+}
