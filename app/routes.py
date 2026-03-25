@@ -30,23 +30,56 @@ def index():
         client = Client.query.filter_by(mail=mail).first()
         if not client:
             client = Client(mail=mail, nom=nom, prenom=prenom)
-            db.session.add(client); db.session.flush()
+            db.session.add(client)
+            db.session.flush()
 
         date_heure_obj = datetime.strptime(f"{date_str} {heure_str}", "%Y-%m-%d %H:%M")
         creneau = Creneau.query.filter_by(date_heure=date_heure_obj).first()
-        if not creneau:
-            creneau = Creneau(date_heure=date_heure_obj, statut='occupe')
-            db.session.add(creneau); db.session.flush()
+        
+        # On ne permet la reservation que si le creneau a ete ouvert par l'admin
+        if creneau:
+            rdv = RendezVous(client_id=client.id, creneau_id=creneau.id, statut='en_attente_mail')
+            db.session.add(rdv)
+            if contenu_message and contenu_message.strip():
+                db.session.add(Message(contenu=contenu_message, client_id=client.id))
+            db.session.commit()
 
-        rdv = RendezVous(client_id=client.id, creneau_id=creneau.id, statut='en_attente_mail')
-        db.session.add(rdv)
-
-        if contenu_message and contenu_message.strip():
-            db.session.add(Message(contenu=contenu_message, client_id=client.id))
-
-        db.session.commit()
         return redirect(url_for('main.index'))
     return render_template('index.html')
+
+@bp.route('/api/creneaux-occupes')
+def get_creneaux_occupes():
+    creneaux = Creneau.query.all()
+    data = {}
+    for c in creneaux:
+        cle = c.date_heure.strftime('%Y-%m-%d_%H:%M')
+        rdv = RendezVous.query.filter_by(creneau_id=c.id).first()
+        if rdv:
+            data[cle] = {"statut": "occupe", "client": f"{rdv.client.prenom} {rdv.client.nom}"}
+        else:
+            data[cle] = {"statut": "disponible"}
+    return jsonify(data)
+
+@bp.route('/api/admin/creneau/action', methods=['POST'])
+@admin_requis
+def admin_creneau_action():
+    data = request.json
+    date_heure_obj = datetime.strptime(f"{data['date']} {data['heure']}", "%Y-%m-%d %H:%M")
+    action = data['action']
+
+    creneau = Creneau.query.filter_by(date_heure=date_heure_obj).first()
+    
+    if action == 'fermer':
+        if creneau:
+            RendezVous.query.filter_by(creneau_id=creneau.id).delete()
+            db.session.delete(creneau)
+    elif action == 'ouvrir':
+        if not creneau:
+            creneau = Creneau(date_heure=date_heure_obj, statut='libre')
+            db.session.add(creneau)
+    
+    db.session.commit()
+    return jsonify({"status": "success"})
 
 @bp.route('/admin/dashboard')
 @admin_requis
@@ -57,49 +90,6 @@ def dashboard():
         clients=Client.query.all(),
         messages=Message.query.order_by(Message.date_envoi.desc()).all()
     )
-
-@bp.route('/api/creneaux-occupes')
-def get_creneaux_occupes():
-    # On récupère tous les créneaux (RDV clients + Bloqués admin)
-    creneaux = Creneau.query.all()
-    data = {}
-    for c in creneaux:
-        cle = c.date_heure.strftime('%Y-%m-%d_%H:%M')
-        rdv = RendezVous.query.filter_by(creneau_id=c.id).first()
-        if rdv:
-            client = rdv.client
-            msg = Message.query.filter_by(client_id=client.id).order_by(Message.date_envoi.desc()).first()
-            data[cle] = {
-                "client": f"{client.prenom} {client.nom}",
-                "message": msg.contenu if msg else "Pas de message laissé."
-            }
-        elif c.statut == 'bloque':
-            data[cle] = {"client": "ADMIN", "message": "Créneau bloqué (Indisponible)."}
-    return jsonify(data)
-
-@bp.route('/api/admin/creneau/action', methods=['POST'])
-@admin_requis
-def admin_creneau_action():
-    data = request.json
-    date_heure_obj = datetime.strptime(f"{data['date']} {data['heure']}", "%Y-%m-%d %H:%M")
-    action = data['action'] # 'libre' ou 'bloque'
-
-    creneau = Creneau.query.filter_by(date_heure=date_heure_obj).first()
-    
-    if action == 'libre':
-        if creneau:
-            rdv = RendezVous.query.filter_by(creneau_id=creneau.id).first()
-            if rdv: db.session.delete(rdv)
-            db.session.delete(creneau)
-    else: # bloque
-        if not creneau:
-            creneau = Creneau(date_heure=date_heure_obj, statut='bloque')
-            db.session.add(creneau)
-        else:
-            creneau.statut = 'bloque'
-    
-    db.session.commit()
-    return jsonify({"status": "success"})
 
 @bp.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():

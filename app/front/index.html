@@ -3,60 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lotus - Reservation</title>
+  <title>Serenia - Réservation</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='pico.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <main class="container">
-    <nav>
-      <ul><li><strong>Lotus Massage</strong></li></ul>
-    </nav>
+    <header class="booking-intro">
+      <h1>Réserver une séance</h1>
+      <p>Sélectionnez une date parmi nos disponibilités.</p>
+    </header>
 
     <section id="reservation">
-      <article>
-        <h2>Choisissez votre créneau</h2>
-        
-        <div class="grid">
-          <div></div>
-          <div style="text-align: right; margin-bottom: 1rem;">
-            <button class="outline secondary" onclick="changerSemaine(-1)">Précédent</button>
-            <span id="cal-week-label" style="margin: 0 1rem; font-weight: bold;"></span>
-            <button class="outline secondary" onclick="changerSemaine(1)">Suivant</button>
-          </div>
+      <article class="compact-picker">
+        <div id="day-selector-container">
+          <label>1. Choisissez une date</label>
+          <div id="day-list" class="day-pills-list">
+            </div>
         </div>
 
-        <div id="booking-grid" class="cal-grid"></div>
+        <div id="time-selector-container" style="display: none; margin-top: 2rem;">
+          <label>2. Choisissez un horaire</label>
+          <div id="time-grid" class="time-pills-grid">
+            </div>
+        </div>
 
-        <hr>
+        <div id="client-info-section">
+            <div class="selected-summary">
+                <p id="selection-display"></p>
+            </div>
 
-        <form method="POST" action="/">
-          <div id="selection-info" style="margin-bottom: 1rem; color: #2ecc71; font-weight: bold;">
-            Veuillez sélectionner un créneau dans le planning ci-dessus.
-          </div>
-          
-          <input type="hidden" id="date" name="date" required>
-          <input type="hidden" id="heure" name="heure" required>
+            <form method="POST" action="/">
+                <input type="hidden" id="date" name="date" required>
+                <input type="hidden" id="heure" name="heure" required>
 
-          <div class="grid">
-            <label>Prénom <input type="text" name="prenom" required></label>
-            <label>Nom <input type="text" name="nom" required></label>
-          </div>
-          <div class="grid">
-            <label>Email <input type="email" name="mail" required></label>
-            <label>Téléphone <input type="tel" name="tel" required></label>
-          </div>
-
-          <label>Message (facultatif)
-            <textarea name="message" rows="2"></textarea>
-          </label>
-
-          <button type="submit" id="btn-submit" disabled>Confirmer la réservation</button>
-        </form>
+                <div class="grid">
+                    <input type="text" name="prenom" placeholder="Prénom" required>
+                    <input type="text" name="nom" placeholder="Nom" required>
+                </div>
+                <div class="grid">
+                    <input type="email" name="mail" placeholder="Email" required>
+                    <input type="tel" name="tel" placeholder="Téléphone" required>
+                </div>
+                <textarea name="message" rows="2" placeholder="Un message ? (facultatif)"></textarea>
+                <button type="submit" class="primary">Confirmer le rendez-vous</button>
+            </form>
+        </div>
       </article>
     </section>
   </main>
-
   <script src="{{ url_for('static', filename='JS/booking.js') }}"></script>
 </body>
 </html>

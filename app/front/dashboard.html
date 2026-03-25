@@ -2,40 +2,23 @@
 <html lang="fr" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <title>Lotus Admin - Dashboard</title>
+  <title>Lotus Admin - Gestion</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='pico.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <main class="container">
-    <nav>
-      <ul><li><strong>Lotus Admin</strong></li></ul>
-      <ul>
-        <li><a href="/" class="secondary">Voir le site</a></li>
-        <li><a href="/admin/logout" role="button" class="outline">Déconnexion</a></li>
-      </ul>
-    </nav>
-
+    <nav><ul><li><strong>Lotus Admin</strong></li></ul></nav>
     <section>
       <div class="grid">
-        <article><header>En attente</header><h2>{{ rdv_en_attente | length }}</h2></article>
-        <article><header>Confirmés</header><h2>{{ rdv_confirmes | length }}</h2></article>
-        <article><header>Clients</header><h2>{{ clients | length }}</h2></article>
-      </div>
-    </section>
-
-    <section>
-      <div class="grid">
-        <h2>Planning hebdomadaire</h2>
+        <h2>Gestion des disponibilites</h2>
         <div style="text-align: right;">
-          <button class="outline secondary" onclick="changerSemaine(-1)">Précédent</button>
+          <button class="outline secondary" onclick="changerSemaine(-1)">Precedent</button>
           <span id="cal-week-label" style="margin: 0 1rem; font-weight: bold;"></span>
           <button class="outline secondary" onclick="changerSemaine(1)">Suivant</button>
         </div>
       </div>
-      <article>
-        <div id="cal-grid" class="cal-grid"></div>
-      </article>
+      <article><div id="cal-grid" class="booking-grid"></div></article>
     </section>
   </main>
 
@@ -43,17 +26,12 @@
     <article>
       <header>
         <button aria-label="Close" rel="prev" onclick="document.getElementById('modal-creneau').removeAttribute('open')"></button>
-        <p><strong>Détails du créneau</strong></p>
+        <p><strong>Gestion du creneau</strong></p>
       </header>
-      <div id="modal-subtitle">
-        </div>
-      <footer id="modal-admin-actions" class="grid" style="margin-top: 1rem; display: none;">
-        <button onclick="actionCreneau('libre')">Libérer / Annuler</button>
-        <button class="secondary" onclick="actionCreneau('bloque')">Bloquer</button>
-      </footer>
+      <div id="modal-subtitle"></div>
+      <footer id="modal-admin-actions" class="grid" style="margin-top: 1rem;"></footer>
     </article>
   </dialog>
-
   <script src="{{ url_for('static', filename='JS/dashboard.js') }}"></script>
 </body>
 </html>

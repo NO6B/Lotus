@@ -1,101 +1,56 @@
-/* Structure de la grille (Heure + 7 jours) */
-.cal-grid {
-    display: grid;
-    grid-template-columns: 80px repeat(7, 1fr);
-    gap: 8px;
-    text-align: center;
-    margin-top: 1rem;
+/* --- CONFIGURATION SERENIA --- */
+:root {
+    --primary: #81A18A;
+    --primary-hover: #6b8a73;
+    --bg-serenia: #F8F6F1;
+    --text-dark: #2C3E33;
+    --border-soft: #DEEEE3;
+    --border-radius: 12px;
 }
 
-/* Style de base des cases */
-.cal-slot {
-    padding: 12px 5px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    cursor: default;
-    transition: all 0.2s ease-in-out;
-    border: 1px solid transparent;
+body { background-color: var(--bg-serenia); color: var(--text-dark); font-family: 'Inter', sans-serif; }
+
+.booking-intro { text-align: center; padding: 3rem 0; }
+article.compact-picker { border: none; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 2rem; border-radius: 20px; }
+
+/* Liste des Jours (Horizontal scrollable) */
+.day-pills-list {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 45px;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 10px 0;
+    scrollbar-width: none; /* Firefox */
+}
+.day-pills-list::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+.day-pill {
+    flex: 0 0 100px;
+    display: flex;
+    flex-direction: column;
+    padding: 15px !important;
+    height: auto !important;
+    text-align: center;
+    border-radius: var(--border-radius) !important;
+}
+.day-pill strong { font-size: 1.1rem; display: block; }
+.day-pill span { font-size: 0.8rem; opacity: 0.8; }
+
+/* Grille des Heures */
+.time-pills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+}
+.time-pill { font-weight: 600 !important; }
+
+/* Formulaire Progressif */
+#client-info-section { 
+    opacity: 0; max-height: 0; overflow: hidden; transition: all 0.5s ease-in-out; 
+}
+#client-info-section.visible { 
+    opacity: 1; max-height: 1000px; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--border-soft); 
 }
 
-/* --- ÉTATS DES CRÉNEAUX --- */
+.selected-summary { background: #F3F8F5; padding: 1rem; border-radius: 10px; margin-bottom: 1.5rem; color: var(--primary); }
 
-/* Créneau libre (disponible) */
-.cal-slot.libre {
-    background-color: #f0f4f8;
-    color: #475569;
-    border: 1px dashed #cbd5e1;
-    cursor: pointer;
-}
-
-.cal-slot.libre:hover {
-    background-color: #e2e8f0;
-    transform: scale(1.02);
-    border-style: solid;
-}
-
-/* Créneau sélectionné par le client (avant validation) */
-.cal-slot.libre.selected {
-    background-color: #22c55e !important; /* Vert Lotus */
-    color: white !important;
-    font-weight: bold;
-    border: 1px solid #16a34a;
-    box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
-}
-
-/* Créneau occupé par un RDV client */
-.cal-slot.occupe {
-    background-color: #fee2e2;
-    color: #ef4444;
-    font-weight: bold;
-    border: 1px solid #fecaca;
-    cursor: not-allowed;
-}
-
-/* Créneau bloqué par l'admin (Indisponible) */
-.cal-slot.bloque {
-    background-color: #f1f5f9;
-    color: #94a3b8;
-    text-decoration: line-through;
-    border: 1px solid #e2e8f0;
-    cursor: not-allowed;
-}
-
-/* --- MISE EN PAGE --- */
-
-/* En-têtes (Jours et Heures) */
-.cal-grid div strong {
-    color: var(--primary);
-    display: block;
-}
-
-.cal-grid div small {
-    color: #64748b;
-    font-weight: bold;
-}
-
-/* Ajustement pour le titre du planning */
-.grid h2 { 
-    margin-bottom: 0; 
-}
-
-/* Style pour la zone d'info sous le planning (Index) */
-#selection-info {
-    padding: 10px;
-    border-radius: 4px;
-    background: #f8fafc;
-    border-left: 4px solid #22c55e;
-    margin-bottom: 1.5rem;
-}
-
-/* Responsive : scroll horizontal sur mobile pour ne pas écraser la grille */
-@media (max-width: 768px) {
-    .cal-grid {
-        overflow-x: auto;
-        display: grid;
-        grid-template-columns: 60px repeat(7, 120px);
-    }
-}
+.no-slots { color: #94a3b8; font-style: italic; }
