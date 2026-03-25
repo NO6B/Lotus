@@ -3,140 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Serenia - Institut de Massage</title>
+  <title>Institut de Massage - Réservation</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='pico.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/flatpickr.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
   <main class="container">
     <nav>
-      <ul>
-        <li><strong>Sere<em>nia</em></strong></li>
-      </ul>
+      <ul><li><strong>Massage</strong></li></ul>
       <ul>
         <li><a href="#soins" class="secondary">Soins</a></li>
         <li><a href="#reservation" role="button">Réserver</a></li>
       </ul>
     </nav>
 
-    <header style="padding: 4rem 0; text-align: center;">
-      <hgroup>
-        <h1>L'art du <em>bien-être</em> absolu</h1>
-        <p>Un espace où le temps s'arrête pour laisser place à la relaxation profonde.</p>
-      </hgroup>
-      <a href="#reservation" role="button">Prendre rendez-vous</a>
+    <header style="padding: 2rem 0; text-align: center;">
+      <h1>Massage énergétique chinois</h1>
     </header>
 
-    <section id="soins">
-      <h2>Nos Soins</h2>
-      <article>
-        <header><strong>Forfait Séance Personnalisée</strong></header>
-        <p>Un soin adapté à vos besoins : relaxation profonde, récupération musculaire ou évasion sensorielle.</p>
-        <div class="grid">
-          <div><strong>Adulte :</strong> 60€ / 60 min</div>
-          <div><strong>Enfant :</strong> 50€ / 45 min</div>
-        </div>
-      </article>
-    </section>
-
     <section id="reservation">
-      <h2>Réserver une séance</h2>
       <article>
-        <form>
+        <h2>Réserver une séance</h2>
+        <form method="POST" action="/">
           <div class="grid">
-            <label for="prenom">Prénom
-              <input type="text" id="prenom" required>
-            </label>
-            <label for="nom">Nom
-              <input type="text" id="nom" required>
-            </label>
+            <label>Prénom <input type="text" name="prenom" required></label>
+            <label>Nom <input type="text" name="nom" required></label>
           </div>
-          
           <div class="grid">
-            <label for="email">Email
-              <input type="email" id="email" required>
-            </label>
-            <label for="tel">Téléphone
-              <input type="tel" id="tel" required>
-            </label>
+            <label>Email <input type="email" name="mail" required></label>
+            <label>Téléphone <input type="tel" name="tel" required></label>
           </div>
 
-          <label for="date">Date souhaitée
-            <input type="date" id="date" onchange="chargerCreneaux(this.value)" required>
-          </label>
+          <label for="date">Date souhaitée</label>
+          <input type="text" id="date" name="date" placeholder="Choisir une date..." readonly required>
 
-          <div id="slot-section" style="display: none; margin-bottom: 1rem;">
+          <div id="slot-section" style="display: none; margin-top: 1rem;">
             <label>Créneaux disponibles</label>
             <div id="slot-grid" class="slot-grid"></div>
-            <input type="hidden" id="heure" required>
+            <input type="hidden" id="heure" name="heure" required>
           </div>
 
-          <button type="button" onclick="handleSubmit()">Confirmer la réservation</button>
+          <label for="message" style="margin-top: 1rem;">Message ou précisions (facultatif)</label>
+          <textarea id="message" name="message" rows="3" placeholder="Ex: Douleurs au dos, allergies..."></textarea>
+
+          <button type="submit">Confirmer la réservation</button>
         </form>
       </article>
     </section>
-
-    <hr>
-    
-    <footer>
-      <div class="grid">
-        <div>
-          <strong>Serenia</strong>
-          <p>12 Allée de Chartres<br>33000 Bordeaux</p>
-        </div>
-        <div style="text-align: right;">
-          <a href="/admin/login" class="secondary">Espace Admin</a>
-        </div>
-      </div>
-    </footer>
   </main>
 
-  <script>
-    document.getElementById('date').min = new Date().toISOString().split('T')[0];
-    var HEURES_DISPO = ['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00','19:00'];
-
-    function chargerCreneaux(date) {
-      if (!date) return;
-      document.getElementById('slot-section').style.display = 'block';
-      var grid = document.getElementById('slot-grid');
-      grid.innerHTML = '';
-      
-      var creneaux = {};
-      try {
-        var stored = localStorage.getItem('creneaux_serenia');
-        if (stored) creneaux = JSON.parse(stored);
-      } catch(e) {}
-
-      HEURES_DISPO.forEach(function(heure) {
-        var cle = date + '_' + heure;
-        var info = creneaux[cle];
-        var statut = info ? info.statut : 'vide';
-
-        if(statut === 'libre' || statut === 'vide') {
-          var btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'outline secondary';
-          btn.textContent = heure;
-          btn.style.marginBottom = "0";
-          btn.onclick = function() {
-            document.querySelectorAll('#slot-grid button').forEach(b => b.classList.replace('primary', 'secondary'));
-            this.classList.replace('secondary', 'primary');
-            document.getElementById('heure').value = heure;
-          };
-          grid.appendChild(btn);
-        }
-      });
-
-      if(grid.innerHTML === '') grid.innerHTML = '<p><small>Aucun créneau disponible.</small></p>';
-    }
-
-    function handleSubmit() {
-      var email = document.getElementById('email').value;
-      var heure = document.getElementById('heure').value;
-      if(!email || !heure) return alert("Veuillez remplir tous les champs et sélectionner une heure.");
-      alert('Demande envoyée pour ' + heure);
-    }
-  </script>
+  <script src="{{ url_for('static', filename='js/flatpickr.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/booking.js') }}"></script>
 </body>
 </html>

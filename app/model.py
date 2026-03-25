@@ -14,8 +14,9 @@ class Client(db.Model):
     nom = db.Column(db.String(50), nullable=False)
     prenom = db.Column(db.String(50), nullable=False)
     
-    # Relation : Un client peut avoir plusieurs rendez-vous
     rendez_vous = db.relationship('RendezVous', backref='client', lazy=True)
+    # Relation pour accéder aux messages du client
+    messages = db.relationship('Message', backref='client', lazy=True)
 
 class Creneau(db.Model):
     __tablename__ = "creneau"
@@ -30,20 +31,11 @@ class RendezVous(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
     creneau_id = db.Column(db.Integer, db.ForeignKey('creneau.id'), nullable=False, unique=True)
-    
-    # Statuts suggérés : "en_attente_mail", "confirme", "annule"
     statut = db.Column(db.String(50), default="en_attente_mail") 
-
-class VerificationOTP(db.Model):
-    __tablename__ = "verification_otp"
-    id = db.Column(db.Integer, primary_key=True)
-    rendezvous_id = db.Column(db.Integer, db.ForeignKey('rendez_vous.id'), nullable=False)
-    code = db.Column(db.String(6), nullable=False)
-    date_expiration = db.Column(db.DateTime, nullable=False)
 
 class Message(db.Model):
     __tablename__ = "message"
     id = db.Column(db.Integer, primary_key=True)
-    mail_expediteur = db.Column(db.String(120), nullable=False)
     contenu = db.Column(db.Text, nullable=False)
     date_envoi = db.Column(db.DateTime, default=datetime.utcnow)
+    client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)

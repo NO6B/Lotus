@@ -7,9 +7,10 @@ db = SQLAlchemy()
 
 
 def my_app():
-	app = Flask(__name__,
-			template_folder='front',
-            static_folder='front')
+	
+	app = Flask(__name__, 
+                template_folder='front', 
+                static_folder='front')
 	app.config.from_object(Config)
 
 	# Initialize extensions

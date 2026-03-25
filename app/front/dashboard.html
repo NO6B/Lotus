@@ -2,85 +2,56 @@
 <html lang="fr" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Serenia - Dashboard Admin</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='pico.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
   <main class="container">
     <nav>
-      <ul>
-        <li><strong>Sere<em>nia</em> Admin</strong></li>
-      </ul>
+      <ul><li><strong>Serenia Admin</strong></li></ul>
       <ul>
         <li><a href="/admin/dashboard" class="secondary">Dashboard</a></li>
-        <li><a href="/" class="secondary">Voir le site</a></li>
         <li><a href="/admin/logout" role="button" class="outline">Déconnexion</a></li>
       </ul>
     </nav>
 
-    <section>
-      <div class="grid">
-        <article>
-          <header>En attente</header>
-          <h2>{{ rdv_en_attente | length }}</h2>
-        </article>
-        <article>
-          <header>Confirmés</header>
-          <h2>{{ rdv_confirmes | length }}</h2>
-        </article>
-        <article>
-          <header>Clients</header>
-          <h2>{{ clients | length }}</h2>
-        </article>
-      </div>
-    </section>
+    <div class="grid">
+      <article><header>En attente</header><h2>{{ rdv_en_attente | length }}</h2></article>
+      <article><header>Confirmés</header><h2>{{ rdv_confirmes | length }}</h2></article>
+      <article><header>Clients</header><h2>{{ clients | length }}</h2></article>
+    </div>
 
     <section>
-      <h2>Rendez-vous en attente</h2>
-      {% if rdv_en_attente %}
+      <h2>Messages des clients</h2>
       <figure>
         <table role="grid">
           <thead>
-            <tr>
-              <th>Client</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
+            <tr><th>Client</th><th>Message</th><th>Date</th></tr>
           </thead>
           <tbody>
-            {% for rdv in rdv_en_attente %}
+            {% for msg in messages %}
             <tr>
-              <td>{{ rdv.client.prenom }} {{ rdv.client.nom }}<br><small>{{ rdv.client.email }}</small></td>
-              <td>{{ rdv.date_heure.strftime('%d %b %Y - %H:%M') }}</td>
-              <td>
-                <button class="outline" onclick="window.location.href='/admin/rdv/{{ rdv.id }}/confirmer'" style="margin-bottom:0; padding: 0.2rem 0.5rem;">Confirmer</button>
-                <button class="outline secondary" onclick="window.location.href='/admin/rdv/{{ rdv.id }}/annuler'" style="margin-bottom:0; padding: 0.2rem 0.5rem;">Annuler</button>
-              </td>
+              <td><strong>{{ msg.client.prenom }} {{ msg.client.nom }}</strong></td>
+              <td>{{ msg.contenu }}</td>
+              <td><small>{{ msg.date_envoi.strftime('%d/%m/%Y %H:%M') }}</small></td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
       </figure>
-      {% else %}
-      <p>Aucun rendez-vous en attente.</p>
-      {% endif %}
     </section>
 
     <section>
       <div class="grid">
         <h2>Planning</h2>
         <div style="text-align: right;">
-          <button class="secondary outline" onclick="changerSemaine(-1)">←</button>
+          <button class="outline secondary" onclick="changerSemaine(-1)">Précédent</button>
           <span id="cal-week-label" style="margin: 0 1rem;"></span>
-          <button class="secondary outline" onclick="changerSemaine(1)">→</button>
+          <button class="outline secondary" onclick="changerSemaine(1)">Suivant</button>
         </div>
       </div>
-      <article>
-        <div id="cal-grid" class="cal-grid"></div>
-      </article>
+      <article><div id="cal-grid" class="cal-grid"></div></article>
     </section>
   </main>
 
@@ -88,85 +59,16 @@
     <article>
       <header>
         <button aria-label="Close" rel="prev" onclick="document.getElementById('modal-creneau').removeAttribute('open')"></button>
-        <p><strong>Gestion du Créneau</strong></p>
+        <p><strong>Détails du créneau</strong></p>
       </header>
-      <p id="modal-subtitle"></p>
-      <div class="grid">
-        <button onclick="actionCreneau('libre')">Marquer Libre</button>
+      <div id="modal-subtitle"></div>
+      <div id="modal-admin-actions" class="grid" style="margin-top: 1rem;">
+        <button onclick="actionCreneau('libre')">Libérer</button>
         <button class="secondary" onclick="actionCreneau('bloque')">Bloquer</button>
       </div>
     </article>
   </dialog>
 
-  <script>
-    var HEURES = ['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00','19:00'];
-    var JOURS_COURTS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
-    var offsetSemaine = 0;
-    var creneaux = {}; 
-    var modalCle = null;
-
-    try {
-      var stored = localStorage.getItem('creneaux_serenia');
-      if (stored) creneaux = JSON.parse(stored);
-    } catch(e) {}
-
-    function getLundiSemaine(offset) {
-      var d = new Date();
-      var jour = d.getDay();
-      var diff = (jour === 0) ? -6 : 1 - jour;
-      d.setDate(d.getDate() + diff + offset * 7);
-      return d;
-    }
-
-    function formatDate(d) {
-      return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-    }
-
-    function construireCalendrier() {
-      var lundi = getLundiSemaine(offsetSemaine);
-      var dimanche = new Date(lundi); dimanche.setDate(dimanche.getDate() + 6);
-      document.getElementById('cal-week-label').textContent = lundi.toLocaleDateString('fr-FR') + ' - ' + dimanche.toLocaleDateString('fr-FR');
-
-      var grid = document.getElementById('cal-grid');
-      grid.innerHTML = '<div></div>'; 
-
-      var jours = [];
-      for (var i = 0; i < 7; i++) {
-        var d = new Date(lundi); d.setDate(d.getDate() + i);
-        jours.push(d);
-        grid.innerHTML += '<div><strong>' + JOURS_COURTS[i] + '</strong><br>' + d.getDate() + '</div>';
-      }
-
-      HEURES.forEach(function(heure) {
-        grid.innerHTML += '<div><small>' + heure + '</small></div>';
-        jours.forEach(function(jour) {
-          var dateStr = formatDate(jour);
-          var cle = dateStr + '_' + heure;
-          var statut = creneaux[cle] ? creneaux[cle].statut : 'vide';
-          
-          var div = document.createElement('div');
-          div.className = 'cal-slot ' + statut;
-          div.innerHTML = statut === 'vide' ? '-' : statut.substring(0,3);
-          div.onclick = function() {
-            modalCle = cle;
-            document.getElementById('modal-subtitle').textContent = dateStr + ' à ' + heure + ' (' + statut + ')';
-            document.getElementById('modal-creneau').setAttribute('open', true);
-          };
-          grid.appendChild(div);
-        });
-      });
-    }
-
-    function changerSemaine(dir) { offsetSemaine += dir; construireCalendrier(); }
-
-    function actionCreneau(nouveauStatut) {
-      creneaux[modalCle] = { statut: nouveauStatut };
-      localStorage.setItem('creneaux_serenia', JSON.stringify(creneaux));
-      document.getElementById('modal-creneau').removeAttribute('open');
-      construireCalendrier();
-    }
-
-    construireCalendrier();
-  </script>
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 </body>
 </html>

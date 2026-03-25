@@ -1,54 +1,79 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify
+from datetime import datetime
 from .model import RendezVous, Message, Admin, Client, Creneau
 from app import db
 
 bp = Blueprint("main", __name__)
 
-@bp.route('/admin/dashboard', methods=['GET', 'POST'])
-def dashboard():
-
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-
-        admin = Admin.query.filter_by(username=username).first()
-
-        if admin and admin.password_hash == password:
-            return render_template('dashboard.html')
-
-    rdv_en_attente = RendezVous.query.filter_by(statut='en_attente_mail').all()
-    rdv_confirmes = RendezVous.query.filter_by(statut='confirme').all()
-
-
-    tous_les_clients = Client.query.all()
-    objet = Admin(
-        username='admin',
-        password_hash='admin'
-    )
-    db.session.add(objet)
-    db.session.commit()
-
-    return render_template(
-        'dashboard.html', 
-        rdv_en_attente=rdv_en_attente, 
-        rdv_confirmes=rdv_confirmes,
-        clients=tous_les_clients
-    )
-
-@bp.route('/')
-@bp.route('/index', methods = ['POST', 'GET'])
+@bp.route('/', methods=['GET', 'POST'])
 def index():
-
     if request.method == 'POST':
-        mail = request.form['mail']
-        nom = request.form['nom']
-        prenom = request.form['prenom']
+        mail = request.form.get('mail')
+        nom = request.form.get('nom')
+        prenom = request.form.get('prenom')
+        date_str = request.form.get('date')   
+        heure_str = request.form.get('heure') 
+        contenu_message = request.form.get('message')
+
+        if not mail or not date_str or not heure_str:
+            return redirect(url_for('main.index'))
+
+        client = Client.query.filter_by(mail=mail).first()
+        if not client:
+            client = Client(mail=mail, nom=nom, prenom=prenom)
+            db.session.add(client)
+            db.session.flush()
+
+        date_heure_obj = datetime.strptime(f"{date_str} {heure_str}", "%Y-%m-%d %H:%M")
+        creneau = Creneau.query.filter_by(date_heure=date_heure_obj).first()
+        if not creneau:
+            creneau = Creneau(date_heure=date_heure_obj, statut='occupe')
+            db.session.add(creneau)
+            db.session.flush()
+
+        rdv = RendezVous(client_id=client.id, creneau_id=creneau.id, statut='en_attente_mail')
+        db.session.add(rdv)
+
+        if contenu_message and contenu_message.strip():
+            db.session.add(Message(contenu=contenu_message, client_id=client.id))
         
-        objet = Client(
-            mail=mail,
-            nom=nom,
-            prenom=prenom
-        )
-        db.session.add(objet)
         db.session.commit()
-        return render_template('index.html')
+        return redirect(url_for('main.index'))
+    return render_template('index.html')
+
+@bp.route('/admin/dashboard')
+def dashboard():
+    return render_template('dashboard.html', 
+        rdv_en_attente=RendezVous.query.filter_by(statut='en_attente_mail').all(),
+        rdv_confirmes=RendezVous.query.filter_by(statut='confirme').all(),
+        clients=Client.query.all(),
+        messages=Message.query.order_by(Message.date_envoi.desc()).all()
+    )
+
+@bp.route('/api/creneaux-occupes')
+def get_creneaux_occupes():
+    creneaux = Creneau.query.join(RendezVous).all()
+    data = {}
+    for c in creneaux:
+        rdv = RendezVous.query.filter_by(creneau_id=c.id).first()
+        if rdv:
+            client = rdv.client
+            msg = Message.query.filter_by(client_id=client.id).order_by(Message.date_envoi.desc()).first()
+            cle = c.date_heure.strftime('%Y-%m-%d_%H:%M')
+            data[cle] = {
+                "client": f"{client.prenom} {client.nom}",
+                "message": msg.contenu if msg else "Pas de message laissé."
+            }
+    return jsonify(data)
+
+@bp.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        admin = Admin.query.filter_by(username=request.form.get('username')).first()
+        if admin and admin.password_hash == request.form.get('password'):
+            return redirect(url_for('main.dashboard'))
+    return render_template('login.html')
+
+@bp.route('/admin/logout')
+def logout():
+    return redirect(url_for('main.admin_login'))

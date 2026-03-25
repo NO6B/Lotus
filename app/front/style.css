@@ -1,13 +1,31 @@
-:root {
-  --pico-primary: #8b6f47;
-  --pico-primary-hover: #7a6f62;
-  --pico-primary-background: #8b6f47;
+.cal-grid {
+    display: grid;
+    grid-template-columns: 80px repeat(7, 1fr);
+    gap: 5px;
+    text-align: center;
 }
 
-.cal-grid { display: grid; grid-template-columns: 60px repeat(7, 1fr); gap: 2px; text-align: center; }
-.cal-slot { background: var(--pico-form-element-background); border-radius: var(--pico-border-radius); cursor: pointer; padding: 0.5rem; }
-.cal-slot:hover { background: var(--pico-primary-hover); color: white; }
-.cal-slot.bloque { background: #c87070; color: white; cursor: not-allowed; }
-.cal-slot.reserve { background: #a07020; color: white; cursor: not-allowed; }
-.slot-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
-.slot-selected { background: var(--pico-primary); color: white; }
+.cal-slot {
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: default;
+    transition: 0.2s;
+}
+
+/* Créneau libre */
+.cal-slot.libre {
+    background: #f0f4f8;
+    color: #94a3b8;
+}
+
+/* Créneau occupé par un client */
+.cal-slot.occupe {
+    background: #fee2e2;
+    color: #ef4444;
+    font-weight: bold;
+    border: 1px solid #fecaca;
+}
+
+/* Style des boutons de changement de semaine */
+.grid h2 { margin-bottom: 0; }
