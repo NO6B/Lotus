@@ -35,8 +35,7 @@ def index():
 
         date_heure_obj = datetime.strptime(f"{date_str} {heure_str}", "%Y-%m-%d %H:%M")
         creneau = Creneau.query.filter_by(date_heure=date_heure_obj).first()
-        
-        # On ne permet la reservation que si le creneau a ete ouvert par l'admin
+
         if creneau:
             rdv = RendezVous(client_id=client.id, creneau_id=creneau.id, statut='en_attente_mail')
             db.session.add(rdv)
@@ -55,7 +54,16 @@ def get_creneaux_occupes():
         cle = c.date_heure.strftime('%Y-%m-%d_%H:%M')
         rdv = RendezVous.query.filter_by(creneau_id=c.id).first()
         if rdv:
-            data[cle] = {"statut": "occupe", "client": f"{rdv.client.prenom} {rdv.client.nom}"}
+            dernier_message = Message.query.filter_by(client_id=rdv.client.id)\
+                .order_by(Message.date_envoi.desc()).first()
+            data[cle] = {
+                "statut": "occupe",
+                "client": f"{rdv.client.prenom} {rdv.client.nom}",
+                "prenom": rdv.client.prenom,
+                "nom": rdv.client.nom,
+                "mail": rdv.client.mail,
+                "message": dernier_message.contenu if dernier_message else None
+            }
         else:
             data[cle] = {"statut": "disponible"}
     return jsonify(data)
@@ -68,7 +76,7 @@ def admin_creneau_action():
     action = data['action']
 
     creneau = Creneau.query.filter_by(date_heure=date_heure_obj).first()
-    
+
     if action == 'fermer':
         if creneau:
             RendezVous.query.filter_by(creneau_id=creneau.id).delete()
@@ -77,7 +85,7 @@ def admin_creneau_action():
         if not creneau:
             creneau = Creneau(date_heure=date_heure_obj, statut='libre')
             db.session.add(creneau)
-    
+
     db.session.commit()
     return jsonify({"status": "success"})
 

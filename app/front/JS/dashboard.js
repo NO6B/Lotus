@@ -1,80 +1,164 @@
 var HEURES = ['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00','19:00'];
-var JOURS_COURTS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+var JOURS_COURTS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 var offsetSemaine = 0;
-var selectedDate = '', selectedHeure = '';
+var selectedDate = '';
+var selectedHeure = '';
+var currentInfo = null;
 
 async function construireCalendrier() {
-    const response = await fetch('/api/creneaux-occupes');
-    const data = await response.json();
-    const lundi = getLundiSemaine(offsetSemaine);
-    const grid = document.getElementById('cal-grid');
-    if (!grid) return;
+  const response = await fetch('/api/creneaux-occupes');
+  const data = await response.json();
+  const lundi = getLundiSemaine(offsetSemaine);
+  const grid = document.getElementById('cal-grid');
+  if (!grid) return;
 
-    document.getElementById('cal-week-label').textContent = lundi.toLocaleDateString('fr-FR');
-    grid.innerHTML = '';
-    grid.appendChild(document.createElement('div'));
+  // Mettre à jour le label de semaine
+  const dimanche = new Date(lundi);
+  dimanche.setDate(dimanche.getDate() + 6);
+  const opts = { day: 'numeric', month: 'long' };
+  document.getElementById('cal-week-label').textContent =
+    lundi.toLocaleDateString('fr-FR', opts) + ' – ' +
+    dimanche.toLocaleDateString('fr-FR', opts);
+
+  grid.innerHTML = '';
+
+  // Cellule vide coin haut-gauche
+  const corner = document.createElement('div');
+  corner.className = 'cal-corner';
+  grid.appendChild(corner);
+
+  // En-têtes des jours
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(lundi);
+    d.setDate(d.getDate() + i);
+    const isToday = formatDate(d) === formatDate(new Date());
+
+    const header = document.createElement('div');
+    header.className = 'cal-day-header' + (isToday ? ' today' : '');
+    header.innerHTML =
+      '<span class="day-name">' + JOURS_COURTS[i] + '</span>' +
+      '<span class="day-num">' + d.getDate() + '</span>';
+    grid.appendChild(header);
+  }
+
+  // Lignes horaires
+  HEURES.forEach(function (h) {
+    const timeLabel = document.createElement('div');
+    timeLabel.className = 'cal-time-label';
+    timeLabel.textContent = h;
+    grid.appendChild(timeLabel);
 
     for (var i = 0; i < 7; i++) {
-        var d = new Date(lundi); d.setDate(d.getDate() + i);
-        const header = document.createElement('div');
-        header.className = 'booking-day-header';
-        header.innerHTML = `<strong>${JOURS_COURTS[i]}</strong><small>${d.getDate()}</small>`;
-        grid.appendChild(header);
+      var d = new Date(lundi);
+      d.setDate(d.getDate() + i);
+      const dateStr = formatDate(d);
+      const cle = dateStr + '_' + h;
+      const info = data[cle];
+
+      const cell = document.createElement('div');
+
+      if (!info) {
+        cell.className = 'cal-slot ferme';
+        cell.innerHTML = '<span class="slot-icon">—</span>';
+      } else if (info.statut === 'occupe') {
+        cell.className = 'cal-slot occupe';
+        cell.innerHTML =
+          '<span class="slot-icon">●</span>' +
+          '<span class="slot-name">' + (info.client || '') + '</span>';
+      } else {
+        cell.className = 'cal-slot libre';
+        cell.innerHTML = '<span class="slot-icon">◆</span><span class="slot-label">Ouvert</span>';
+      }
+
+      (function (ds, hs, inf) {
+        cell.onclick = function () {
+          selectedDate = ds;
+          selectedHeure = hs;
+          currentInfo = inf;
+          ouvrirModal(ds, hs, inf);
+        };
+      })(dateStr, h, info);
+
+      grid.appendChild(cell);
     }
+  });
+}
 
-    HEURES.forEach(h => {
-        const timeLabel = document.createElement('div');
-        timeLabel.innerHTML = `<strong>${h}</strong>`;
-        grid.appendChild(timeLabel);
+function ouvrirModal(dateStr, heure, info) {
+  const modal = document.getElementById('modal-creneau');
+  const subtitle = document.getElementById('modal-subtitle');
+  const footer = document.getElementById('modal-admin-actions');
+  const title = document.getElementById('modal-title');
 
-        for (var i = 0; i < 7; i++) {
-            var d = new Date(lundi); d.setDate(d.getDate() + i);
-            const dateStr = formatDate(d);
-            const cle = dateStr + '_' + h;
-            const info = data[cle];
-            const div = document.createElement('div');
-            
-            div.className = 'booking-slot ' + (info ? (info.statut === 'occupe' ? 'occupe' : 'libre') : 'ferme');
-            div.innerHTML = info ? (info.statut === 'occupe' ? 'RDV' : 'OUVERT') : '-';
+  const dateObj = new Date(dateStr);
+  const dateFormatee = dateObj.toLocaleDateString('fr-FR', {
+    weekday: 'long', day: 'numeric', month: 'long'
+  });
 
-            div.onclick = function() {
-                selectedDate = dateStr; selectedHeure = h;
-                const modal = document.getElementById('modal-creneau');
-                const subtitle = document.getElementById('modal-subtitle');
-                const footer = document.getElementById('modal-admin-actions');
+  title.textContent = dateFormatee + ' · ' + heure;
 
-                if (info && info.statut === 'occupe') {
-                    subtitle.innerHTML = `<p>Client : ${info.client}</p>`;
-                    footer.innerHTML = `<button class="secondary" onclick="actionCreneau('fermer')">Fermer et Annuler</button>`;
-                } else if (info && info.statut === 'disponible') {
-                    subtitle.innerHTML = `<p>Creneau ouvert. Voulez-vous le retirer ?</p>`;
-                    footer.innerHTML = `<button class="secondary" onclick="actionCreneau('fermer')">Retirer l'ouverture</button>`;
-                } else {
-                    subtitle.innerHTML = `<p>Creneau ferme. Voulez-vous l'ouvrir aux clients ?</p>`;
-                    footer.innerHTML = `<button onclick="actionCreneau('ouvrir')">Ouvrir le creneau</button>`;
-                }
-                modal.setAttribute('open', true);
-            };
-            grid.appendChild(div);
-        }
-    });
+  if (info && info.statut === 'occupe') {
+    subtitle.innerHTML =
+      '<div class="modal-status occupe">' +
+      '<span class="status-dot"></span>Créneau réservé' +
+      '</div>' +
+      '<p class="modal-client"><strong>' + info.client + '</strong></p>';
+    footer.innerHTML =
+      '<button class="modal-btn danger" onclick="actionCreneau(\'fermer\')">Annuler le rendez-vous</button>';
+  } else if (info && info.statut === 'disponible') {
+    subtitle.innerHTML =
+      '<div class="modal-status libre">' +
+      '<span class="status-dot"></span>Créneau ouvert aux réservations' +
+      '</div>';
+    footer.innerHTML =
+      '<button class="modal-btn secondary" onclick="actionCreneau(\'fermer\')">Retirer ce créneau</button>';
+  } else {
+    subtitle.innerHTML =
+      '<div class="modal-status ferme">' +
+      '<span class="status-dot"></span>Créneau fermé' +
+      '</div>' +
+      '<p class="modal-hint">Ouvrez ce créneau pour permettre les réservations.</p>';
+    footer.innerHTML =
+      '<button class="modal-btn primary" onclick="actionCreneau(\'ouvrir\')">Ouvrir ce créneau</button>';
+  }
+
+  modal.classList.add('open');
+}
+
+function fermerModal() {
+  document.getElementById('modal-creneau').classList.remove('open');
 }
 
 async function actionCreneau(action) {
-    const resp = await fetch('/api/admin/creneau/action', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ date: selectedDate, heure: selectedHeure, action: action })
-    });
-    if (resp.ok) { document.getElementById('modal-creneau').removeAttribute('open'); construireCalendrier(); }
+  const resp = await fetch('/api/admin/creneau/action', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ date: selectedDate, heure: selectedHeure, action: action })
+  });
+  if (resp.ok) {
+    fermerModal();
+    construireCalendrier();
+  }
 }
 
 function getLundiSemaine(offset) {
-    var d = new Date(); var jour = d.getDay();
-    var diff = (jour === 0) ? -6 : 1 - jour;
-    d.setDate(d.getDate() + diff + offset * 7);
-    d.setHours(0,0,0,0); return d;
+  var d = new Date();
+  var jour = d.getDay();
+  var diff = (jour === 0) ? -6 : 1 - jour;
+  d.setDate(d.getDate() + diff + offset * 7);
+  d.setHours(0, 0, 0, 0);
+  return d;
 }
-function formatDate(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
-function changerSemaine(dir) { offsetSemaine += dir; construireCalendrier(); }
+
+function formatDate(d) {
+  return d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0');
+}
+
+function changerSemaine(dir) {
+  offsetSemaine += dir;
+  construireCalendrier();
+}
+
 document.addEventListener('DOMContentLoaded', construireCalendrier);

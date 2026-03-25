@@ -3,55 +3,241 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Serenia - Réservation</title>
+  <title>Lotus – Réflexologie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='pico.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <main class="container">
-    <header class="booking-intro">
-      <h1>Réserver une séance</h1>
-      <p>Sélectionnez une date parmi nos disponibilités.</p>
-    </header>
 
-    <section id="reservation">
-      <article class="compact-picker">
-        <div id="day-selector-container">
-          <label>1. Choisissez une date</label>
-          <div id="day-list" class="day-pills-list">
+  <!-- NAV -->
+  <nav class="nav" id="main-nav">
+    <a href="#" class="nav-logo">Lotus</a>
+    <ul class="nav-links">
+      <li><a href="#apropos">À propos</a></li>
+      <li><a href="#tarifs">Tarifs</a></li>
+    </ul>
+    <a href="#reservation" class="nav-cta">Réserver</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="accueil">
+    <div class="hero-content">
+      <div class="hero-tag">Réflexologie plantaire</div>
+      <h1>Le soin qui part<br><em>de vos pieds</em></h1>
+      <p class="hero-subtitle">
+        La réflexologie plantaire agit sur l'ensemble de l'organisme en stimulant les zones réflexes des pieds. Un soin doux et profond, adapté à tous les âges.
+      </p>
+      <div class="hero-actions">
+        <a href="#reservation" class="btn-primary">Prendre rendez-vous</a>
+        <a href="#apropos" class="btn-ghost">En savoir plus</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <strong>60€</strong>
+          <span>de l'heure</span>
+        </div>
+        <div class="stat">
+          <strong>Tous</strong>
+          <span>les âges</span>
+        </div>
+        <div class="stat">
+          <strong>Sur</strong>
+          <span>rendez-vous</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-image">
+      <div class="hero-img-wrap">
+        <div class="hero-ornament">◈</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- À PROPOS -->
+  <section id="apropos">
+    <div class="container-inner">
+      <div class="about-grid">
+        <div class="about-visual reveal">
+          <div class="about-img"></div>
+          <div class="about-card">
+            <strong>Certifiée</strong>
+            <span>Réflexologie plantaire</span>
+          </div>
+          <div class="about-card about-card-2">
+            <strong>Adultes & Enfants</strong>
+            <span>Soins adaptés</span>
+          </div>
+        </div>
+        <div class="about-content reveal" style="transition-delay: 0.15s">
+          <div class="section-label">À propos</div>
+          <h2 class="section-title">Une pratique au service<br>de votre <em>équilibre</em></h2>
+          <p class="section-lead">
+            La réflexologie plantaire est une technique de stimulation des zones réflexes situées sur les pieds, correspondant à chaque organe et partie du corps. Le soin favorise la relaxation, soutient les fonctions naturelles de l'organisme et aide à retrouver l'équilibre.
+          </p>
+          <ul class="about-list">
+            <li>Séance individuelle, en silence et en douceur, dans un espace dédié au repos</li>
+            <li>Protocole adapté selon votre état de santé, vos besoins et votre sensibilité</li>
+            <li>Soins accessibles aux enfants dès le plus jeune âge, avec une approche spécifique</li>
+            <li>Tarif unique et transparent : 60 € de l'heure, sans surprise</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TARIFS -->
+  <section id="tarifs">
+    <div class="container-inner">
+      <div class="tarifs-header reveal">
+        <div class="section-label">Tarifs</div>
+        <h2 class="section-title">Simple et <em>transparent</em></h2>
+        <p class="section-lead">Un tarif unique à 60 € de l'heure, que vous soyez adulte ou enfant.</p>
+      </div>
+      <div class="tarifs-grid">
+        <div class="tarif-card reveal" style="transition-delay: 0.1s">
+          <div class="tarif-name">Adulte</div>
+          <div class="tarif-desc">Séance complète adaptée à vos tensions et à votre rythme.</div>
+          <div class="tarif-price">
+            <span class="tarif-amount">60</span>
+            <span class="tarif-unit">€ / h</span>
+          </div>
+          <ul class="tarif-features">
+            <li>Bilan initial offert</li>
+            <li>Séance d'une heure</li>
+            <li>Suivi personnalisé</li>
+            <li>Sur rendez-vous</li>
+          </ul>
+          <a href="#reservation" class="tarif-btn">Réserver</a>
+        </div>
+        <div class="tarif-card featured reveal" style="transition-delay: 0.2s">
+          <div class="tarif-name">Enfant</div>
+          <div class="tarif-desc">Séance douce et adaptée aux plus jeunes, pour favoriser leur équilibre naturel.</div>
+          <div class="tarif-price">
+            <span class="tarif-amount">60</span>
+            <span class="tarif-unit">€ / h</span>
+          </div>
+          <ul class="tarif-features">
+            <li>Approche douce et bienveillante</li>
+            <li>Séance d'une heure</li>
+            <li>Présence d'un parent bienvenue</li>
+            <li>Sur rendez-vous</li>
+          </ul>
+          <a href="#reservation" class="tarif-btn">Réserver</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RÉSERVATION -->
+  <section id="reservation">
+    <div class="container-inner">
+      <div class="reservation-grid">
+        <div class="reservation-info reveal">
+          <div class="section-label">Réservation</div>
+          <h2 class="section-title">Choisissez votre<br><em>créneau</em></h2>
+          <p class="section-lead">Sélectionnez une date et un horaire parmi les disponibilités. Votre rendez-vous est enregistré immédiatement.</p>
+          <div class="reservation-perks">
+            <div class="perk">
+              <div class="perk-line"></div>
+              <div class="perk-text">
+                <strong>Réservation en ligne</strong>
+                <span>Disponible à toute heure, sans appel nécessaire.</span>
+              </div>
             </div>
+            <div class="perk">
+              <div class="perk-line"></div>
+              <div class="perk-text">
+                <strong>Confirmation rapide</strong>
+                <span>Votre rendez-vous est enregistré immédiatement.</span>
+              </div>
+            </div>
+            <div class="perk">
+              <div class="perk-line"></div>
+              <div class="perk-text">
+                <strong>Annulation flexible</strong>
+                <span>Prévenez au moins 24h à l'avance en cas d'empêchement.</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div id="time-selector-container" style="display: none; margin-top: 2rem;">
-          <label>2. Choisissez un horaire</label>
-          <div id="time-grid" class="time-pills-grid">
-            </div>
-        </div>
+        <div class="booking-widget reveal" style="transition-delay: 0.2s">
 
-        <div id="client-info-section">
+          <!-- Navigation semaine -->
+          <div class="week-nav">
+            <button class="week-nav-btn" onclick="changerSemaineClient(-1)" title="Semaine précédente">‹</button>
+            <span class="week-nav-label" id="week-label">Chargement…</span>
+            <button class="week-nav-btn" onclick="changerSemaineClient(1)" title="Semaine suivante">›</button>
+          </div>
+
+          <div id="day-selector-container" style="margin-top: 1.25rem;">
+            <span class="booking-step-label">1 — Choisissez une date</span>
+            <div id="day-list" class="day-pills-list"></div>
+          </div>
+
+          <div id="time-selector-container" style="display:none; margin-top: 1.5rem;">
+            <span class="booking-step-label">2 — Choisissez un horaire</span>
+            <div id="time-grid" class="time-pills-grid"></div>
+          </div>
+
+          <div id="client-info-section">
             <div class="selected-summary">
-                <p id="selection-display"></p>
+              <p id="selection-display"></p>
             </div>
-
             <form method="POST" action="/">
-                <input type="hidden" id="date" name="date" required>
-                <input type="hidden" id="heure" name="heure" required>
-
-                <div class="grid">
-                    <input type="text" name="prenom" placeholder="Prénom" required>
-                    <input type="text" name="nom" placeholder="Nom" required>
-                </div>
-                <div class="grid">
-                    <input type="email" name="mail" placeholder="Email" required>
-                    <input type="tel" name="tel" placeholder="Téléphone" required>
-                </div>
+              <input type="hidden" id="date" name="date" required>
+              <input type="hidden" id="heure" name="heure" required>
+              <span class="booking-step-label">3 — Vos coordonnées</span>
+              <div class="booking-form-grid">
+                <input type="text" name="prenom" placeholder="Prénom" required>
+                <input type="text" name="nom" placeholder="Nom" required>
+                <input type="email" name="mail" placeholder="E-mail" required>
+                <input type="tel" name="tel" placeholder="Téléphone" required>
                 <textarea name="message" rows="2" placeholder="Un message ? (facultatif)"></textarea>
-                <button type="submit" class="primary">Confirmer le rendez-vous</button>
+              </div>
+              <button type="submit" class="booking-submit">Confirmer le rendez-vous</button>
             </form>
+          </div>
         </div>
-      </article>
-    </section>
-  </main>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand-name">Lotus</div>
+        <p class="footer-desc">Cabinet de réflexologie plantaire, pour adultes et enfants. Un soin doux au service de votre équilibre.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#apropos">À propos</a></li>
+          <li><a href="#tarifs">Tarifs</a></li>
+          <li><a href="#reservation">Réservation</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="#">Sur rendez-vous uniquement</a></li>
+          <li><a href="/admin/login">Espace administration</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Lotus</span>
+      <a href="#">Mentions légales</a>
+    </div>
+  </footer>
+
   <script src="{{ url_for('static', filename='JS/booking.js') }}"></script>
+  <script src="{{ url_for('static', filename='JS/main.js') }}"></script>
 </body>
 </html>
