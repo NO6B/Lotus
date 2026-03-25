@@ -2,14 +2,14 @@
 <html lang="fr" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <title>Serenia - Dashboard Admin</title>
+  <title>Lotus - Dashboard Admin</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='pico.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <main class="container">
     <nav>
-      <ul><li><strong>Serenia Admin</strong></li></ul>
+      <ul><li><strong>Lotus Admin</strong></li></ul>
       <ul>
         <li><a href="/admin/dashboard" class="secondary">Dashboard</a></li>
         <li><a href="/admin/logout" role="button" class="outline">Déconnexion</a></li>
@@ -37,6 +37,9 @@
               <td><small>{{ msg.date_envoi.strftime('%d/%m/%Y %H:%M') }}</small></td>
             </tr>
             {% endfor %}
+            {% if not messages %}
+            <tr><td colspan="3"><em>Aucun message pour l'instant.</em></td></tr>
+            {% endif %}
           </tbody>
         </table>
       </figure>
@@ -46,9 +49,9 @@
       <div class="grid">
         <h2>Planning</h2>
         <div style="text-align: right;">
-          <button class="outline secondary" onclick="changerSemaine(-1)">Précédent</button>
+          <button class="outline secondary" onclick="changerSemaine(-1)">◀ Précédent</button>
           <span id="cal-week-label" style="margin: 0 1rem;"></span>
-          <button class="outline secondary" onclick="changerSemaine(1)">Suivant</button>
+          <button class="outline secondary" onclick="changerSemaine(1)">Suivant ▶</button>
         </div>
       </div>
       <article><div id="cal-grid" class="cal-grid"></div></article>
@@ -62,13 +65,12 @@
         <p><strong>Détails du créneau</strong></p>
       </header>
       <div id="modal-subtitle"></div>
-      <div id="modal-admin-actions" class="grid" style="margin-top: 1rem;">
-        <button onclick="actionCreneau('libre')">Libérer</button>
-        <button class="secondary" onclick="actionCreneau('bloque')">Bloquer</button>
+      <div id="modal-admin-actions" class="grid" style="margin-top: 1rem; display: none;">
+        <button onclick="document.getElementById('modal-creneau').removeAttribute('open')">Fermer</button>
       </div>
     </article>
   </dialog>
 
-  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+  <script src="{{ url_for('static', filename='JS/dashboard.js') }}"></script>
 </body>
 </html>
