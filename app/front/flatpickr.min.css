@@ -1,0 +1,10 @@
+.flatpickr-calendar{background:transparent;opacity:0;display:none;text-align:center;visibility:hidden;padding:0;animation:none;direction:ltr;border:0;font-size:14px;line-height:24px;border-radius:5px;position:absolute;width:307.875px;box-sizing:border-box;touch-action:manipulation;background:#fff;box-shadow:1px 0 0 #e6e6e6,-1px 0 0 #e6e6e6,0 1px 0 #e6e6e6,0 -1px 0 #e6e6e6,0 3px 13px rgba(0,0,0,0.08)}
+.flatpickr-calendar.open{opacity:1;max-height:640px;visibility:visible;display:inline-block;z-index:999}
+.flatpickr-month{background:transparent;color:rgba(0,0,0,0.9);fill:rgba(0,0,0,0.9);height:34px;line-height:1;text-align:center;position:relative;user-select:none;overflow:hidden;flex:1}
+.flatpickr-day{background:none;border:1px solid transparent;border-radius:150px;box-sizing:border-box;color:#393939;cursor:pointer;font-weight:400;width:14.2857143%;flex-basis:14.2857143%;max-width:39px;height:39px;line-height:39px;margin:0;display:inline-block;position:relative;justify-content:center}
+.flatpickr-day.selected{background:#569ff7;color:#fff;border-color:#569ff7}
+.flatpickr-day.flatpickr-disabled{color:rgba(57,57,57,0.3);background:transparent;cursor:default}
+.flatpickr-months{display:flex}
+.flatpickr-innerContainer{display:block;box-sizing:border-box;overflow:hidden}
+.flatpickr-rContainer{display:inline-block;padding:0;box-sizing:border-box}
+.flatpickr-days{position:relative;overflow:hidden;display:flex;align-items:flex-start;width:307.875px}
