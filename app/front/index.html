@@ -1,471 +1,142 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Institut de Massage Moderne</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serenia - Institut de Massage</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='pico.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <style>
-    /* ── GRILLE HORAIRE ── */
-    .slot-section { margin-top: 1rem; }
-    .slot-section-label {
-      font-size: 10px;
-      font-weight: 400;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: .6rem;
-      display: block;
-    }
-    .slot-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: .5rem;
-    }
-    .slot-btn {
-      font-family: var(--font-body);
-      font-size: 12px;
-      font-weight: 300;
-      padding: .7rem .4rem;
-      text-align: center;
-      border: 1px solid var(--stone-l);
-      background: var(--warm);
-      color: var(--charcoal);
-      cursor: pointer;
-      transition: all .25s;
-      letter-spacing: .05em;
-    }
-    .slot-btn:hover:not(.slot-pris):not(.slot-bloque) {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: rgba(139,111,71,.05);
-    }
-    .slot-btn.slot-selected {
-      background: var(--deep);
-      color: var(--cream);
-      border-color: var(--deep);
-    }
-    .slot-btn.slot-pris {
-      background: #f9f9f9;
-      color: #ccc;
-      border-color: #eee;
-      cursor: not-allowed;
-      text-decoration: line-through;
-    }
-    .slot-btn.slot-bloque {
-      background: #fff0f0;
-      color: #ddd;
-      border-color: #f5c6cb;
-      cursor: not-allowed;
-    }
-    .slot-loading {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 1rem;
-      font-size: 12px;
-      font-weight: 300;
-      color: var(--muted);
-      letter-spacing: .1em;
-    }
-    .slot-empty {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 1.5rem;
-      font-size: 12px;
-      font-weight: 300;
-      color: var(--muted);
-    }
-    .slot-legend {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: .8rem;
-      flex-wrap: wrap;
-    }
-    .slot-legend-item {
-      display: flex;
-      align-items: center;
-      gap: .4rem;
-      font-size: 11px;
-      font-weight: 300;
-      color: var(--muted);
-    }
-    .slot-legend-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
-    .dot-dispo  { background: var(--stone-l); border: 1px solid var(--stone); }
-    .dot-pris   { background: #ddd; }
-    .dot-select { background: var(--deep); }
-  </style>
 </head>
 <body>
 
-<!-- NAVIGATION -->
-<nav id="navbar">
-  <a href="#" class="nav-logo">X</a>
-  <ul class="nav-links">
-    <li><a href="#soins">Soins</a></li>
-    <li><a href="#reservation">Reservation</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <button class="nav-btn" onclick="document.getElementById('reservation').scrollIntoView({behavior:'smooth'})">
-    Reserver
-  </button>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-left">
-    <div class="anim-up d1 hero-tag">Massage energetique</div>
-    <h1 class="anim-up d2 hero-title">
-      L'art du<br/>
-      <em>bien-etre</em><br/>
-      absolu
-    </h1>
-    <p class="anim-up d3 hero-desc">
-      xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-    </p>
-    <div class="anim-up d4 hero-actions">
-      <a href="#reservation" class="btn-primary">Prendre rendez-vous</a>
-      <a href="#soins" class="btn-ghost">&#8595; Nos soins</a>
-    </div>
-    <div class="anim-up d5 hero-stats">
-      <div>
-        <div class="stat-num">12+</div>
-        <div class="stat-lbl">Techniques</div>
-      </div>
-      <div>
-        <div class="stat-num">8 ans</div>
-        <div class="stat-lbl">D'expertise</div>
-      </div>
-    </div>
-  </div>
-  <div class="hero-right">
-    <img src="" alt="Seance de massage" />
-    <div class="hero-badge float">
-      <div class="badge-icon">&#10022;</div>
-      <div>
-        <div class="badge-top">Certification</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section class="services" id="soins">
-  <div class="section-header">
-    <span class="section-tag">Nos soins</span>
-    <h2 class="section-title">Chaque seance,<br/><em>xxxxxxxxxxxxxxx</em></h2>
-    <p class="section-sub">xxxxxxxxx</p>
-  </div>
-  <div class="forfait-card reveal">
-    <div class="fc-icon">&#10022;</div>
-    <h3 class="fc-name">Forfait Seance</h3>
-    <div class="fc-dur">Massage - Relaxation - Bien-etre</div>
-    <p class="fc-desc">
-      Un soin personnalise selon vos besoins - relaxation profonde, recuperation musculaire ou evasion sensorielle.
-    </p>
-    <div class="fc-div">
-      <div class="fc-tarifs">
-        <div class="fc-tarif">
-          <div class="fc-pl">Adulte</div>
-          <div class="fc-pv">60&#8364;</div>
-          <div class="fc-unit fc-pl">/ seance</div>
-        </div>
-        <div class="fc-sep"></div>
-        <div class="fc-tarif">
-          <div class="fc-pl">Enfant</div>
-          <div class="fc-pv">50&#8364;</div>
-          <div class="fc-unit fc-pl">/ seance</div>
-        </div>
-      </div>
-      <a href="#reservation" class="fc-cta">Reserver &#8594;</a>
-    </div>
-  </div>
-</section>
-
-<!-- RESERVATION -->
-<section class="reservation" id="reservation">
-  <div class="resa-grid">
-    <div class="resa-info reveal">
-      <div class="section-header">
-        <span class="section-tag">Reservation</span>
-        <h2 class="section-title">Planifiez votre<br/><em>moment</em></h2>
-        <p class="section-sub">Reservez en ligne en quelques secondes. Confirmation immediate par email.</p>
-      </div>
-      <ul class="info-list">
-        <li class="info-item">
-          <div class="info-icon">&#128205;</div>
-          <div>
-            <div class="info-lbl">Adresse</div>
-            <div class="info-val">xxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
-          </div>
-        </li>
-        <li class="info-item">
-          <div class="info-icon">&#128336;</div>
-          <div>
-            <div class="info-lbl">Horaires</div>
-            <div class="info-val">Lun - Sam : 9h - 20h &middot; Dim : 10h - 17h</div>
-          </div>
-        </li>
-        <li class="info-item">
-          <div class="info-icon">&#128222;</div>
-          <div>
-            <div class="info-lbl">Telephone</div>
-            <div class="info-val">xxxxxxxxxxxxxxxxxx</div>
-          </div>
-        </li>
-        <li class="info-item">
-          <div class="info-icon">&#9993;</div>
-          <div>
-            <div class="info-lbl">Email</div>
-            <div class="info-val">xxxxxxxxxxxxxxxxxx</div>
-          </div>
-        </li>
+  <main class="container">
+    <nav>
+      <ul>
+        <li><strong>Sere<em>nia</em></strong></li>
       </ul>
-      <a href="#soins" class="btn-ghost">&#8592; Voir nos soins</a>
-    </div>
+      <ul>
+        <li><a href="#soins" class="secondary">Soins</a></li>
+        <li><a href="#reservation" role="button">Réserver</a></li>
+      </ul>
+    </nav>
 
-    <div class="form-box reveal">
-      <h3 class="form-title">Reserver une seance</h3>
-      <div class="form-grid">
+    <header style="padding: 4rem 0; text-align: center;">
+      <hgroup>
+        <h1>L'art du <em>bien-être</em> absolu</h1>
+        <p>Un espace où le temps s'arrête pour laisser place à la relaxation profonde.</p>
+      </hgroup>
+      <a href="#reservation" role="button">Prendre rendez-vous</a>
+    </header>
 
-        <div class="form-group">
-          <label for="prenom">Prenom</label>
-          <input type="text" id="prenom" placeholder="Marie" />
+    <section id="soins">
+      <h2>Nos Soins</h2>
+      <article>
+        <header><strong>Forfait Séance Personnalisée</strong></header>
+        <p>Un soin adapté à vos besoins : relaxation profonde, récupération musculaire ou évasion sensorielle.</p>
+        <div class="grid">
+          <div><strong>Adulte :</strong> 60€ / 60 min</div>
+          <div><strong>Enfant :</strong> 50€ / 45 min</div>
         </div>
-        <div class="form-group">
-          <label for="nom">Nom</label>
-          <input type="text" id="nom" placeholder="Dupont" />
-        </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="marie@exemple.fr" />
-        </div>
-        <div class="form-group">
-          <label for="tel">Telephone</label>
-          <input type="tel" id="tel" placeholder="+33 6 00 00 00 00" />
-        </div>
+      </article>
+    </section>
 
-        <div class="form-group full">
-          <label for="soin">Duree souhaitee</label>
-          <select id="soin">
-            <option value="" disabled selected>Choisir une duree</option>
-            <option>Forfait Seance - 30 min</option>
-            <option>Forfait Seance - 45 min</option>
-            <option>Forfait Seance - 60 min</option>
-            <option>Forfait Seance - 90 min</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="tarif">Tarif</label>
-          <select id="tarif">
-            <option value="" disabled selected>Selectionner</option>
-            <option>Adulte - 60EUR</option>
-            <option>Enfant - 50EUR</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="date">Date souhaitee</label>
-          <input type="date" id="date" onchange="chargerCreneaux(this.value)" />
-        </div>
-
-        <!-- GRILLE HORAIRE -->
-        <div class="form-group full slot-section" id="slot-section" style="display:none;">
-          <span class="slot-section-label">Choisir un creneau</span>
-          <div class="slot-legend">
-            <div class="slot-legend-item"><div class="slot-legend-dot dot-dispo"></div> Disponible</div>
-            <div class="slot-legend-item"><div class="slot-legend-dot dot-pris"></div> Indisponible</div>
-            <div class="slot-legend-item"><div class="slot-legend-dot dot-select"></div> Selectionne</div>
+    <section id="reservation">
+      <h2>Réserver une séance</h2>
+      <article>
+        <form>
+          <div class="grid">
+            <label for="prenom">Prénom
+              <input type="text" id="prenom" required>
+            </label>
+            <label for="nom">Nom
+              <input type="text" id="nom" required>
+            </label>
           </div>
-          <div class="slot-grid" id="slot-grid">
-            <div class="slot-loading">Choisissez une date</div>
+          
+          <div class="grid">
+            <label for="email">Email
+              <input type="email" id="email" required>
+            </label>
+            <label for="tel">Téléphone
+              <input type="tel" id="tel" required>
+            </label>
           </div>
-          <input type="hidden" id="heure" value="" />
+
+          <label for="date">Date souhaitée
+            <input type="date" id="date" onchange="chargerCreneaux(this.value)" required>
+          </label>
+
+          <div id="slot-section" style="display: none; margin-bottom: 1rem;">
+            <label>Créneaux disponibles</label>
+            <div id="slot-grid" class="slot-grid"></div>
+            <input type="hidden" id="heure" required>
+          </div>
+
+          <button type="button" onclick="handleSubmit()">Confirmer la réservation</button>
+        </form>
+      </article>
+    </section>
+
+    <hr>
+    
+    <footer>
+      <div class="grid">
+        <div>
+          <strong>Serenia</strong>
+          <p>12 Allée de Chartres<br>33000 Bordeaux</p>
         </div>
-
-        <div class="form-group full">
-          <label for="message">Informations complementaires (optionnel)</label>
-          <textarea id="message" placeholder="Allergies, preferences, contre-indications medicales..."></textarea>
+        <div style="text-align: right;">
+          <a href="/admin/login" class="secondary">Espace Admin</a>
         </div>
       </div>
+    </footer>
+  </main>
 
-      <button class="submit-btn" onclick="handleSubmit()">Confirmer la reservation</button>
-    </div>
-  </div>
-</section>
+  <script>
+    document.getElementById('date').min = new Date().toISOString().split('T')[0];
+    var HEURES_DISPO = ['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00','19:00'];
 
-<!-- FOOTER -->
-<footer id="contact">
-  <div class="footer-grid">
-    <div>
-      <a href="#" class="footer-logo">Sere<span>nia</span></a>
-      <p class="footer-about">Institut de massage moderne. Un espace ou le temps s'arrete pour laisser place au bien-etre profond.</p>
-    </div>
-    <div>
-      <div class="footer-col-title">Soins</div>
-      <div class="footer-links">
-        <a href="#soins">Massage Suedois</a>
-        <a href="#soins">Deep Tissue</a>
-        <a href="#soins">Massage Balinais</a>
-        <a href="#soins">Hot Stones</a>
-        <a href="#soins">Massage Prenatal</a>
-      </div>
-    </div>
-    <div>
-      <div class="footer-col-title">Institut</div>
-      <div class="footer-links">
-        <a href="#">Notre histoire</a>
-        <a href="#">Certifications</a>
-      </div>
-    </div>
-    <div>
-      <div class="footer-col-title">Contact</div>
-      <div class="footer-links">
-        <a href="#">12 Allee de Chartres</a>
-        <a href="#">33000 Bordeaux</a>
-        <a href="tel:+33556123456">+33 xxxxxxxxx</a>
-        <a href="mailto:contact@serenia-bordeaux.fr">contact@xxxxxxxxx.fr</a>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span class="footer-copy">
-      2025 - Tous droits reserves
-      &nbsp;&middot;&nbsp;
-      <a href="/admin/login" class="footer-admin-link">Admin</a>
-    </span>
-    <div class="footer-socials">
-      <a href="#" class="soc-btn" aria-label="Instagram">&#10022;</a>
-      <a href="#" class="soc-btn" aria-label="Facebook">f</a>
-      <a href="#" class="soc-btn" aria-label="Pinterest">P</a>
-    </div>
-  </div>
-</footer>
+    function chargerCreneaux(date) {
+      if (!date) return;
+      document.getElementById('slot-section').style.display = 'block';
+      var grid = document.getElementById('slot-grid');
+      grid.innerHTML = '';
+      
+      var creneaux = {};
+      try {
+        var stored = localStorage.getItem('creneaux_serenia');
+        if (stored) creneaux = JSON.parse(stored);
+      } catch(e) {}
 
-<script>
-  // ── NAV SCROLL ──
-  window.addEventListener('scroll', function() {
-    document.getElementById('navbar').style.boxShadow =
-      window.scrollY > 40 ? '0 4px 40px rgba(26,22,16,.1)' : 'none';
-  });
+      HEURES_DISPO.forEach(function(heure) {
+        var cle = date + '_' + heure;
+        var info = creneaux[cle];
+        var statut = info ? info.statut : 'vide';
 
-  // ── REVEAL ──
-  var obs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e, i) {
-      if (e.isIntersecting) {
-        setTimeout(function() { e.target.classList.add('on'); }, i * 90);
-        obs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+        if(statut === 'libre' || statut === 'vide') {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'outline secondary';
+          btn.textContent = heure;
+          btn.style.marginBottom = "0";
+          btn.onclick = function() {
+            document.querySelectorAll('#slot-grid button').forEach(b => b.classList.replace('primary', 'secondary'));
+            this.classList.replace('secondary', 'primary');
+            document.getElementById('heure').value = heure;
+          };
+          grid.appendChild(btn);
+        }
+      });
 
-  // ── DATE MIN ──
-  document.getElementById('date').min = new Date().toISOString().split('T')[0];
-
-  // ── GRILLE HORAIRE ──
-  var HEURES_DISPO = ['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00','19:00'];
-  var heureSelectionnee = '';
-
-  function chargerCreneaux(date) {
-    if (!date) return;
-    heureSelectionnee = '';
-    document.getElementById('heure').value = '';
-
-    var section = document.getElementById('slot-section');
-    var grid = document.getElementById('slot-grid');
-    section.style.display = 'block';
-    grid.innerHTML = '<div class="slot-loading">Chargement...</div>';
-
-    // Recuperer les creneaux bloques/pris depuis localStorage (dashboard admin)
-    var creneaux = {};
-    try {
-      var stored = localStorage.getItem('creneaux_serenia');
-      if (stored) creneaux = JSON.parse(stored);
-    } catch(e) {}
-
-    var now = new Date();
-    var slots = [];
-
-    HEURES_DISPO.forEach(function(heure) {
-      var cle = date + '_' + heure;
-      var info = creneaux[cle];
-      var statut = info ? info.statut : 'vide';
-
-      // Verifier si creneau passe
-      var slotDate = new Date(date + 'T' + heure + ':00');
-      var estPasse = slotDate < now;
-
-      if (estPasse) {
-        slots.push({ heure: heure, statut: 'pris', label: heure });
-      } else if (statut === 'bloque') {
-        slots.push({ heure: heure, statut: 'bloque', label: heure });
-      } else if (statut === 'reserve' || statut === 'confirme') {
-        slots.push({ heure: heure, statut: 'pris', label: heure });
-      } else {
-        slots.push({ heure: heure, statut: 'libre', label: heure });
-      }
-    });
-
-    grid.innerHTML = '';
-
-    var libres = slots.filter(function(s) { return s.statut === 'libre'; });
-    if (libres.length === 0) {
-      grid.innerHTML = '<div class="slot-empty">Aucun creneau disponible ce jour. Choisissez une autre date.</div>';
-      return;
+      if(grid.innerHTML === '') grid.innerHTML = '<p><small>Aucun créneau disponible.</small></p>';
     }
 
-    slots.forEach(function(slot) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'slot-btn' +
-        (slot.statut === 'pris'   ? ' slot-pris'   : '') +
-        (slot.statut === 'bloque' ? ' slot-bloque'  : '');
-      btn.textContent = slot.label;
-      btn.dataset.heure = slot.heure;
-
-      if (slot.statut === 'libre') {
-        btn.addEventListener('click', function() {
-          document.querySelectorAll('.slot-btn').forEach(function(b) {
-            b.classList.remove('slot-selected');
-          });
-          this.classList.add('slot-selected');
-          heureSelectionnee = this.dataset.heure;
-          document.getElementById('heure').value = heureSelectionnee;
-        });
-      } else {
-        btn.disabled = true;
-      }
-
-      grid.appendChild(btn);
-    });
-  }
-
-  // ── SUBMIT ──
-  function handleSubmit() {
-    var prenom = document.getElementById('prenom').value.trim();
-    var email  = document.getElementById('email').value.trim();
-    var soin   = document.getElementById('soin').value;
-    var tarif  = document.getElementById('tarif').value;
-    var date   = document.getElementById('date').value;
-    var heure  = document.getElementById('heure').value;
-
-    if (!prenom || !email || !soin || !tarif || !date || !heure) {
-      alert('Veuillez remplir tous les champs et choisir un creneau.');
-      return;
+    function handleSubmit() {
+      var email = document.getElementById('email').value;
+      var heure = document.getElementById('heure').value;
+      if(!email || !heure) return alert("Veuillez remplir tous les champs et sélectionner une heure.");
+      alert('Demande envoyée pour ' + heure);
     }
-
-    var dateStr = new Date(date).toLocaleDateString('fr-FR', {
-      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-    });
-
-    alert('Reservation confirmee !\n\nBonjour ' + prenom + ',\n' + soin + ' (' + tarif + ')\nle ' + dateStr + ' a ' + heure + '.\n\nConfirmation envoyee a ' + email + '.');
-  }
-</script>
-
+  </script>
 </body>
 </html>

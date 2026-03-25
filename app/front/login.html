@@ -1,169 +1,38 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Connexion Admin</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion Admin - Serenia</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='pico.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <style>
-    body {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--cream);
-    }
-
-    .login-wrapper {
-      width: 100%;
-      max-width: 420px;
-      padding: 1.5rem;
-    }
-
-    .login-logo {
-      font-family: var(--font-display);
-      font-size: 1.8rem;
-      font-weight: 300;
-      letter-spacing: .12em;
-      color: var(--deep);
-      text-align: center;
-      display: block;
-      margin-bottom: .5rem;
-    }
-    .login-logo span { font-style: italic; color: var(--accent); }
-
-    .login-subtitle {
-      font-size: 10px;
-      font-weight: 300;
-      letter-spacing: .3em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-
-    .login-box {
-      background: var(--warm);
-      border: 1px solid var(--stone-l);
-      padding: 3rem;
-    }
-
-    .login-title {
-      font-family: var(--font-display);
-      font-size: 1.5rem;
-      font-weight: 300;
-      color: var(--deep);
-      margin-bottom: 2rem;
-    }
-
-    .login-group {
-      display: flex;
-      flex-direction: column;
-      gap: .4rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .login-group label {
-      font-size: 10px;
-      font-weight: 400;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .login-group input {
-      font-family: var(--font-body);
-      font-size: .88rem;
-      font-weight: 300;
-      color: var(--charcoal);
-      background: var(--cream);
-      border: 1px solid var(--stone-l);
-      padding: .85rem 1.1rem;
-      outline: none;
-      width: 100%;
-      transition: border-color .3s, background .3s;
-    }
-    .login-group input:focus {
-      border-color: var(--accent);
-      background: #fff;
-    }
-
-    .login-erreur {
-      background: rgba(180,60,60,.08);
-      border: 1px solid rgba(180,60,60,.2);
-      color: #a03030;
-      font-size: 12px;
-      font-weight: 300;
-      padding: .8rem 1rem;
-      margin-bottom: 1.5rem;
-      text-align: center;
-    }
-
-    .login-btn {
-      width: 100%;
-      margin-top: 1.5rem;
-      font-family: var(--font-body);
-      font-size: 11px;
-      font-weight: 400;
-      letter-spacing: .28em;
-      text-transform: uppercase;
-      padding: 1.1rem;
-      background: var(--deep);
-      color: var(--cream);
-      border: none;
-      cursor: pointer;
-      transition: background .35s, transform .35s, box-shadow .35s;
-    }
-    .login-btn:hover {
-      background: var(--accent);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(139,111,71,.3);
-    }
-
-    .login-back {
-      display: block;
-      text-align: center;
-      margin-top: 1.5rem;
-      font-size: 11px;
-      font-weight: 300;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      transition: color .3s;
-    }
-    .login-back:hover { color: var(--deep); }
-  </style>
 </head>
 <body>
+  <main class="container" style="max-width: 400px; margin-top: 10vh;">
+    <article>
+      <header>
+        <h1 style="text-align: center; margin-bottom: 0;">Sere<em>nia</em></h1>
+        <p style="text-align: center; font-size: 0.8rem; color: var(--pico-muted-color);">ESPACE ADMINISTRATION</p>
+      </header>
+      
+      {% if erreur %}
+      <mark style="display: block; margin-bottom: 1rem; text-align: center;">{{ erreur }}</mark>
+      {% endif %}
 
-<div class="login-wrapper">
+      <form method="POST" action="/admin/login">
+        <label for="username">Email</label>
+        <input type="username" id="username" name="username" required />
 
-  <a href="/" class="login-logo">Sere<span>nia</span></a>
-  <div class="login-subtitle">Espace Administration</div>
-
-  <div class="login-box">
-    <h1 class="login-title">Connexion</h1>
-
-    {% if erreur %}
-    <div class="login-erreur">{{ erreur }}</div>
-    {% endif %}
-
-    <form method="POST" action="/admin/login">
-      <div class="login-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="XXXXXXX" required />
-      </div>
-      <div class="login-group">
         <label for="password">Mot de passe</label>
-        <input type="password" id="password" name="password" placeholder="••••••••" required />
-      </div>
-      <button type="submit" class="login-btn">Se connecter</button>
-    </form>
-  </div>
+        <input type="password" id="password" name="password" required />
 
-  <a href="/" class="login-back">&#8592; Retour au site</a>
-
-</div>
-
+        <button type="submit">Se connecter</button>
+      </form>
+      
+      <footer style="text-align: center;">
+        <a href="/" class="secondary">← Retour au site</a>
+      </footer>
+    </article>
+  </main>
 </body>
 </html>
