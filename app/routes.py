@@ -20,6 +20,7 @@ def index():
         mail = request.form.get('mail')
         nom = request.form.get('nom')
         prenom = request.form.get('prenom')
+        tel = request.form.get('tel')          # ← récupération du tel
         date_str = request.form.get('date')
         heure_str = request.form.get('heure')
         contenu_message = request.form.get('message')
@@ -29,9 +30,13 @@ def index():
 
         client = Client.query.filter_by(mail=mail).first()
         if not client:
-            client = Client(mail=mail, nom=nom, prenom=prenom)
+            client = Client(mail=mail, nom=nom, prenom=prenom, tel=tel)  # ← ajout tel
             db.session.add(client)
             db.session.flush()
+        else:
+            # Mise à jour du tel si absent
+            if tel and not client.tel:
+                client.tel = tel
 
         date_heure_obj = datetime.strptime(f"{date_str} {heure_str}", "%Y-%m-%d %H:%M")
         creneau = Creneau.query.filter_by(date_heure=date_heure_obj).first()
@@ -62,6 +67,7 @@ def get_creneaux_occupes():
                 "prenom": rdv.client.prenom,
                 "nom": rdv.client.nom,
                 "mail": rdv.client.mail,
+                "tel": rdv.client.tel or "",        # ← ajout tel
                 "message": dernier_message.contenu if dernier_message else None
             }
         else:
@@ -111,4 +117,4 @@ def admin_login():
 @bp.route('/admin/logout')
 def logout():
     session.pop('admin_logged_in', None)
-    return redirect(url_for('main.admin_login'))
+    return redirect(url_for('main.admin_login')) 

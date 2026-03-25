@@ -13,9 +13,9 @@ class Client(db.Model):
     mail = db.Column(db.String(120), unique=True, nullable=False)
     nom = db.Column(db.String(50), nullable=False)
     prenom = db.Column(db.String(50), nullable=False)
+    tel = db.Column(db.String(20), nullable=True)   # ← ajout numéro de téléphone
     
     rendez_vous = db.relationship('RendezVous', backref='client', lazy=True)
-    # Relation pour accéder aux messages du client
     messages = db.relationship('Message', backref='client', lazy=True)
 
 class Creneau(db.Model):

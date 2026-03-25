@@ -421,13 +421,13 @@
     <div class="sidebar-subtitle">Administration</div>
     <nav class="sidebar-nav">
       <a class="sidebar-link active" onclick="showSection('calendrier')">
-        <span class="sidebar-icon">◈</span> Calendrier
+        <span class="sidebar-icon"></span> Calendrier
       </a>
       <a class="sidebar-link" onclick="showSection('rendez-vous')">
-        <span class="sidebar-icon">◇</span> Rendez-vous
+        <span class="sidebar-icon"></span> Rendez-vous
       </a>
       <a class="sidebar-link" onclick="showSection('messages')">
-        <span class="sidebar-icon">◻</span> Messages
+        <span class="sidebar-icon"></span> Messages
       </a>
     </nav>
     <div class="sidebar-footer">
@@ -459,9 +459,7 @@
           <div class="stat-sub">créneaux accessibles</div>
         </div>
         <div class="stat-card">
-          <div class="stat-label">Taux de remplissage</div>
-          <div class="stat-value" id="stat-taux">—</div>
-          <div class="stat-sub">cette semaine</div>
+          
         </div>
       </div>
 
@@ -530,7 +528,7 @@
 
       {% if not rdv_en_attente and not rdv_confirmes %}
       <div class="empty-state">
-        <span>◈</span>
+        <span></span>
         Aucun rendez-vous pour le moment.
       </div>
       {% endif %}
