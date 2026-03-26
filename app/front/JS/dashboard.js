@@ -77,7 +77,7 @@ async function construireCalendrier() {
       } else if (info.statut === 'occupe') {
         cell.className = 'cal-slot occupe';
         // Indicateur message si présent
-        const msgIcon = info.message ? '<span class="slot-msg-icon" title="Message joint">✉</span>' : '';
+        const msgIcon = info.message ? '<span class="slot-msg-icon" title="Message joint"></span>' : '';
         cell.innerHTML =
           '<span class="slot-icon">●</span>' +
           '<span class="slot-name">' + (info.client || '') + '</span>' +
@@ -117,12 +117,12 @@ function ouvrirModal(dateStr, heure, info) {
   if (info && info.statut === 'occupe') {
     // Bloc téléphone
     const telHtml = info.tel
-      ? '<div class="modal-info-row"><span class="modal-info-icon">📞</span><a href="tel:' + info.tel + '" class="modal-tel">' + info.tel + '</a></div>'
-      : '<div class="modal-info-row"><span class="modal-info-icon">📞</span><span class="modal-info-empty">Non renseigné</span></div>';
+      ? '<div class="modal-info-row"><span class="modal-info-icon"></span><a href="tel:' + info.tel + '" class="modal-tel">' + info.tel + '</a></div>'
+      : '<div class="modal-info-row"><span class="modal-info-icon"></span><span class="modal-info-empty">Non renseigné</span></div>';
 
     // Bloc message
     const msgHtml = info.message
-      ? '<div class="modal-message-block"><div class="modal-message-label">✉ Message du client</div><p class="modal-message-content">' + escapeHtml(info.message) + '</p></div>'
+      ? '<div class="modal-message-block"><div class="modal-message-label">Message du client: </div><p class="modal-message-content">' + escapeHtml(info.message) + '</p></div>'
       : '';
 
     subtitle.innerHTML =
@@ -131,7 +131,7 @@ function ouvrirModal(dateStr, heure, info) {
       '</div>' +
       '<div class="modal-client-card">' +
         '<div class="modal-client-name">' + escapeHtml(info.prenom) + ' ' + escapeHtml(info.nom) + '</div>' +
-        '<div class="modal-info-row"><span class="modal-info-icon">✉</span><span class="modal-info-text">' + escapeHtml(info.mail || '') + '</span></div>' +
+        '<div class="modal-info-row"><span class="modal-info-icon"></span><span class="modal-info-text">' + escapeHtml(info.mail || '') + '</span></div>' +
         telHtml +
       '</div>' +
       msgHtml;

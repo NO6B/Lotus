@@ -51,8 +51,12 @@ body { font-family: var(--font-body); background-color: var(--warm-white); color
 
 /* ===== HERO ===== */
 .hero {
-  min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
-  overflow: hidden; position: relative;
+  min-height: 100vh; 
+  display: grid; 
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden; 
+  position: relative;
+  padding: 0; /* Annule la marge de la balise section pour coller aux bords */
 }
 .hero::before {
   content: ''; position: absolute; top: -10%; right: -5%; width: 55%; height: 120%;
@@ -94,25 +98,27 @@ body { font-family: var(--font-body); background-color: var(--warm-white); color
   font-weight: 400; cursor: pointer; text-decoration: none; transition: all 0.3s; display: inline-block;
 }
 .btn-ghost:hover { border-color: var(--sage); color: var(--sage); }
+
+/* --- MODIFICATIONS APPORTÉES ICI --- */
 .hero-image {
-  position: relative; z-index: 1; display: flex; justify-content: center;
-  align-items: center; padding: 2rem 2rem 2rem 0;
+  position: relative; z-index: 1;
+  padding: 0; /* Suppression des marges pour coller aux bords */
   animation: fadeIn 1.2s ease both 0.3s;
 }
 
-/* ===== HERO IMAGE — PHOTO ===== */
 .hero-img-wrap {
-  width: 100%; max-width: 700px; aspect-ratio: 3/4;
-  border-radius: 200px 200px 0 200px;
+  width: 100%; height: 100%; /* L'image remplit tout l'espace de la colonne de droite */
+  border-radius: 0 0 0 150px; /* Courbure uniquement en bas à gauche */
   position: relative; box-shadow: var(--shadow);
   overflow: hidden;
 }
 .hero-photo {
   width: 100%; height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* Assure le remplissage sans déformer l'image */
   object-position: center;
   display: block;
 }
+/* ---------------------------------- */
 
 .hero-badge {
   position: absolute; bottom: 2rem; left: 1rem;
@@ -528,7 +534,7 @@ footer { background: var(--text); color: rgba(247,243,236,0.5); padding: 4rem 2.
   .hero { grid-template-columns: 1fr; min-height: auto; padding: 120px 2rem 4rem; }
   .hero::before { display: none; }
   .hero-content { padding: 0; }
-  .hero-image { display: none; }
+  .hero-image { display: none; } /* Ton image disparaîtra sur mobile avec cette ligne, dis-moi si tu veux changer ça */
   .about-grid { grid-template-columns: 1fr; gap: 3rem; }
   .about-visual { display: none; }
   .tarifs-grid { grid-template-columns: 1fr; max-width: 440px; }

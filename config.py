@@ -8,5 +8,3 @@ class Config:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(
         os.path.abspath(os.path.dirname(__file__)), 'app.db'
     )
-    ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL")
-    ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
