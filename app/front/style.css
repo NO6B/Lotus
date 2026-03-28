@@ -56,7 +56,7 @@ body { font-family: var(--font-body); background-color: var(--warm-white); color
   grid-template-columns: 1fr 1fr;
   overflow: hidden; 
   position: relative;
-  padding: 0; /* Annule la marge de la balise section pour coller aux bords */
+  padding: 0; 
 }
 .hero::before {
   content: ''; position: absolute; top: -10%; right: -5%; width: 55%; height: 120%;
@@ -99,26 +99,24 @@ body { font-family: var(--font-body); background-color: var(--warm-white); color
 }
 .btn-ghost:hover { border-color: var(--sage); color: var(--sage); }
 
-/* --- MODIFICATIONS APPORTÉES ICI --- */
 .hero-image {
   position: relative; z-index: 1;
-  padding: 0; /* Suppression des marges pour coller aux bords */
+  padding: 0; 
   animation: fadeIn 1.2s ease both 0.3s;
 }
 
 .hero-img-wrap {
-  width: 100%; height: 100%; /* L'image remplit tout l'espace de la colonne de droite */
-  border-radius: 0 0 0 150px; /* Courbure uniquement en bas à gauche */
+  width: 100%; height: 100%; 
+  border-radius: 0 0 0 150px; 
   position: relative; box-shadow: var(--shadow);
   overflow: hidden;
 }
 .hero-photo {
   width: 100%; height: 100%;
-  object-fit: cover; /* Assure le remplissage sans déformer l'image */
+  object-fit: cover; 
   object-position: center;
   display: block;
 }
-/* ---------------------------------- */
 
 .hero-badge {
   position: absolute; bottom: 2rem; left: 1rem;
@@ -150,67 +148,218 @@ h2.section-title em { color: var(--sage); }
 .container-inner { max-width: 1160px; margin: 0 auto; }
 
 /* ===== À PROPOS ===== */
-#apropos { background: var(--cream); }
-.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
-.about-visual { position: relative; }
-.about-img {
-  width: 100%; aspect-ratio: 1;
-  border-radius: 40% 60% 60% 40% / 50% 50% 50% 50%;
-  background: linear-gradient(135deg, rgba(168,196,174,0.4) 0%, var(--sage-light) 100%);
+#apropos { background: var(--cream); } /* MODIFIÉ : Fond Crème */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+
+/* -- Textes et Listes -- */
+.about-tag {
+  display: inline-block;
+  background: var(--sage);
+  color: white;
+  padding: 0.4rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
 }
-.about-card {
-  position: absolute; top: 10%; right: -8%;
-  background: white; border-radius: var(--radius); padding: 1.4rem 1.6rem;
-  box-shadow: var(--shadow); border: 1px solid var(--border); min-width: 170px;
+.about-list-check {
+  list-style: none;
+  margin: 1.5rem 0 2.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
 }
-.about-card strong { display: block; font-family: var(--font-display); font-size: 1.15rem; margin-bottom: 0.15rem; }
-.about-card span { font-size: 0.78rem; color: var(--text-muted); }
-.about-card-2 { top: auto; bottom: 10%; right: auto; left: -8%; }
-.about-list { list-style: none; margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
-.about-list li {
-  display: flex; align-items: flex-start; gap: 1rem;
-  font-size: 0.92rem; color: var(--text-muted); line-height: 1.65;
+.about-list-check li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.95rem;
+  color: var(--text);
 }
-.about-list li::before { content: '—'; color: var(--sage); font-size: 0.85rem; margin-top: 0.15rem; flex-shrink: 0; font-weight: 300; }
+.about-list-check li::before {
+  content: '✓';
+  color: var(--text);
+  font-size: 0.8rem;
+}
+.btn-square {
+  border-radius: 8px !important; 
+}
+
+/* -- Visuel et Image -- */
+.about-visual {
+  position: relative;
+  padding: 1rem; 
+}
+.about-img-mask {
+  width: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  border-radius: 120px 16px 120px 16px; 
+  box-shadow: var(--shadow);
+}
+
+/* -- Cartes Glassmorphism -- */
+.about-glass-card {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5); 
+  backdrop-filter: blur(8px); 
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(122, 155, 130, 0.3); 
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.about-glass-card strong {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  color: var(--sage-dark);
+  line-height: 1;
+  font-weight: 400;
+}
+.about-glass-card span {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--text);
+  margin-top: 0.2rem;
+}
+
+/* Positionnement des cartes */
+.card-top-right { top: 10%; right: -5%; }
+.card-bottom-left { bottom: 20%; left: -10%; }
+.card-bottom-right { bottom: 5%; right: 5%; }
+
+/* Petite icône sur la carte */
+.icon-check {
+  background: var(--sage);
+  color: white;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+}
 
 /* ===== TARIFS ===== */
-#tarifs { background: var(--text); }
-#tarifs .section-label { color: var(--sage-light); }
-#tarifs .section-label::after { background: var(--sage-light); }
-#tarifs h2.section-title { color: var(--cream); }
-#tarifs .section-lead { color: rgba(247,243,236,0.5); }
-.tarifs-header { margin-bottom: 3.5rem; }
-.tarifs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 700px; }
+/* MODIFIÉ : Fond blanc chaud avec fines bordures de séparation */
+#tarifs { 
+  background: var(--warm-white); 
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+#tarifs .section-label { color: var(--text-muted); letter-spacing: 0.15em; }
+#tarifs .section-label::after { display: none; }
+#tarifs h2.section-title { color: var(--text); }
+#tarifs h2.section-title em { color: var(--sage); font-style: italic; }
+#tarifs .section-lead { color: var(--text); margin-bottom: 4rem; }
+
+.tarifs-grid { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 6rem;
+  max-width: 900px; 
+}
+
 .tarif-card {
-  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 24px; padding: 2.5rem 2.2rem; transition: all 0.3s;
+  background: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  transition: none;
 }
-.tarif-card:hover { background: rgba(255,255,255,0.08); transform: translateY(-4px); }
-.tarif-card.featured { background: var(--sage); border-color: var(--sage); }
-.tarif-card.featured:hover { transform: translateY(-4px); }
-.tarif-name { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--cream); margin-bottom: 0.4rem; }
-.tarif-card.featured .tarif-name { color: white; }
-.tarif-desc { font-size: 0.85rem; color: rgba(247,243,236,0.5); margin-bottom: 2rem; line-height: 1.55; }
-.tarif-card.featured .tarif-desc { color: rgba(255,255,255,0.65); }
-.tarif-price { margin-bottom: 2rem; display: flex; align-items: flex-end; gap: 0.3rem; }
-.tarif-amount { font-family: var(--font-display); font-size: 3.4rem; font-weight: 600; color: var(--cream); line-height: 1; }
-.tarif-card.featured .tarif-amount { color: white; }
-.tarif-unit { font-size: 0.85rem; color: rgba(247,243,236,0.4); padding-bottom: 0.4rem; }
-.tarif-features { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 2rem; }
-.tarif-features li { font-size: 0.88rem; color: rgba(247,243,236,0.6); display: flex; align-items: center; gap: 0.8rem; }
-.tarif-card.featured .tarif-features li { color: rgba(255,255,255,0.82); }
-.tarif-features li::before { content: '–'; color: var(--sage-light); flex-shrink: 0; }
-.tarif-card.featured .tarif-features li::before { color: rgba(255,255,255,0.55); }
+.tarif-card:hover { transform: none; background: transparent; }
+.tarif-card.featured { background: transparent; border: none; }
+.tarif-card.featured:hover { transform: none; }
+
+.tarif-name {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+.tarif-card.featured .tarif-name { color: var(--text); }
+
+.tarif-desc { display: none; }
+
+.tarif-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.tarif-amount {
+  font-family: var(--font-display);
+  font-size: 4.5rem;
+  font-weight: 300;
+  color: var(--sage-dark);
+  line-height: 1;
+}
+.tarif-card.featured .tarif-amount { color: var(--sage-dark); }
+
+.tarif-unit {
+  font-size: 1.2rem;
+  color: var(--text);
+  font-weight: 300;
+}
+.tarif-card.featured .tarif-unit { color: var(--text); }
+
+.tarif-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+.tarif-features li {
+  font-size: 0.95rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.tarif-card.featured .tarif-features li { color: var(--text); }
+
+.tarif-features li::before {
+  content: '✓';
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 300;
+  flex-shrink: 0;
+}
+.tarif-card.featured .tarif-features li::before { color: var(--text-muted); }
+
 .tarif-btn {
-  width: 100%; padding: 0.9rem; border-radius: 50px;
-  border: 1.5px solid rgba(255,255,255,0.18); background: transparent;
-  color: var(--cream); font-family: var(--font-body); font-size: 0.85rem; font-weight: 500;
-  cursor: pointer; text-decoration: none; display: block; text-align: center;
-  transition: all 0.3s; letter-spacing: 0.05em;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 4px;
+  background: var(--sage);
+  color: white;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 400;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  transition: background 0.3s;
 }
-.tarif-btn:hover { background: rgba(255,255,255,0.1); }
-.tarif-card.featured .tarif-btn { background: white; color: var(--sage-dark); border-color: white; }
-.tarif-card.featured .tarif-btn:hover { background: var(--cream); }
+.tarif-btn:hover { background: var(--sage-dark); }
+.tarif-card.featured .tarif-btn { background: var(--sage); color: white; border: none; }
+.tarif-card.featured .tarif-btn:hover { background: var(--sage-dark); }
 
 /* ===== RÉSERVATION ===== */
 #reservation { background: var(--cream); }
@@ -534,7 +683,7 @@ footer { background: var(--text); color: rgba(247,243,236,0.5); padding: 4rem 2.
   .hero { grid-template-columns: 1fr; min-height: auto; padding: 120px 2rem 4rem; }
   .hero::before { display: none; }
   .hero-content { padding: 0; }
-  .hero-image { display: none; } /* Ton image disparaîtra sur mobile avec cette ligne, dis-moi si tu veux changer ça */
+  .hero-image { display: none; }
   .about-grid { grid-template-columns: 1fr; gap: 3rem; }
   .about-visual { display: none; }
   .tarifs-grid { grid-template-columns: 1fr; max-width: 440px; }

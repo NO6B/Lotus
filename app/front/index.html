@@ -59,29 +59,41 @@
   <section id="apropos">
     <div class="container-inner">
       <div class="about-grid">
-        <div class="about-visual reveal">
-          <div class="about-img"></div>
-          <div class="about-card">
-            <strong>Certifiée</strong>
-            <span>Réflexologie plantaire</span>
-          </div>
-          <div class="about-card about-card-2">
-            <strong>Adultes & Enfants</strong>
-            <span>Soins adaptés</span>
-          </div>
-        </div>
-        <div class="about-content reveal" style="transition-delay: 0.15s">
-          <div class="section-label">À propos</div>
-          <h2 class="section-title">Une pratique au service<br>de votre <em>équilibre</em></h2>
+        
+        <div class="about-content reveal">
+          <div class="about-tag">À PROPOS —</div>
+          <h2 class="section-title">La réflexologie par<br><em>l'énergétique chinoise</em></h2>
           <p class="section-lead">
-            La réflexologie est une technique de stimulation des zones réflexes situées sur le corps, correspondant à chaque organe et partie du corps. Le soin favorise la relaxation, soutient les fonctions naturelles de l'organisme et aide à retrouver l'équilibre.
+            Mon approche s'appuie sur les principes fondamentaux de la médecine traditionnelle chinoise. Le soin agit sur les méridiens pour relancer la circulation du Qi (l'énergie vitale). En stimulant ces points précis, la séance lève les blocages énergétiques et rétablit l'équilibre physiologique et émotionnel de l'organisme.
           </p>
-          <ul class="about-list">
-            <li>Séance individuelle, en silence et en douceur, dans un espace dédié au repos</li>
-            <li>Protocole adapté selon votre état de santé, vos besoins et votre sensibilité</li>
-            <li>Soins accessibles aux enfants dès le plus jeune âge, avec une approche spécifique</li>
+          <ul class="about-list-check">
+            <li>Libre circulation de l'énergie vitale</li>
+            <li>Levée des blocages physiques et émotionnels</li>
+            <li>Harmonisation des organes et des méridiens</li>
+            <li>Relance des capacités d'auto-guérison</li>
           </ul>
         </div>
+
+        <div class="about-visual reveal" style="transition-delay: 0.15s">
+          <img src="{{ url_for('static', filename='images/hero1.jpg') }}" alt="Soin réflexologie" class="about-img-mask">
+          
+          <div class="about-glass-card card-top-right">
+            <strong>100%</strong>
+            <span>Naturel</span>
+          </div>
+          
+          <div class="about-glass-card card-bottom-left">
+            <div class="icon-check">✓</div>
+            <strong>Certifiée</strong>
+            <span>Praticienne</span>
+          </div>
+          
+          <div class="about-glass-card card-bottom-right">
+            <strong>10+</strong>
+            <span>Années</span>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -90,8 +102,6 @@
     <div class="container-inner">
       <div class="tarifs-header reveal">
         <div class="section-label">Tarifs</div>
-        <h2 class="section-title">Simple et <em>transparent</em></h2>
-        <p class="section-lead">Un tarif à 60 € de l'heure, pour adulte.</p>
       </div>
       <div class="tarifs-grid">
         <div class="tarif-card reveal" style="transition-delay: 0.1s">
@@ -106,7 +116,7 @@
             <li>Suivi personnalisé</li>
             <li>Sur rendez-vous</li>
           </ul>
-          <a href="#reservation" class="tarif-btn">Réserver</a>
+          <a href="#reservation" class="tarif-btn">Réserver cette séance</a>
         </div>
         <div class="tarif-card featured reveal" style="transition-delay: 0.2s">
           <div class="tarif-name">Enfant</div>
@@ -121,7 +131,7 @@
             <li>Présence d'un parent bienvenue</li>
             <li>Sur rendez-vous</li>
           </ul>
-          <a href="#reservation" class="tarif-btn">Réserver</a>
+          <a href="#reservation" class="tarif-btn">Réserver pour mon enfant</a>
         </div>
       </div>
     </div>
