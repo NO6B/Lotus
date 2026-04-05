@@ -22,29 +22,16 @@
   <section class="hero" id="accueil">
     <div class="hero-content">
       <h1>Le soin pars<br><em>la medecine chinoise</em></h1>
+      <p class="hero-desc">Un soin ancestral qui agit sur les méridiens énergétiques pour harmoniser corps et esprit, inspiré de la médecine traditionnelle chinoise.</p>
       <div class="hero-actions">
         <a href="#reservation" class="btn-primary">Prendre rendez-vous</a>
         <a href="#apropos" class="btn-ghost">En savoir plus</a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat">
-          <strong>60€</strong>
-          <span>de l'heure</span>
-        </div>
-        <div class="stat">
-          <strong>Tous</strong>
-          <span>les âges</span>
-        </div>
-        <div class="stat">
-          <strong>Sur</strong>
-          <span>rendez-vous</span>
-        </div>
       </div>
     </div>
     <div class="hero-image">
       <div class="hero-img-wrap">
         <img src="{{ url_for('static', filename='images/hero.jpg') }}"
-             alt="Réflexologie plantaire"
+             alt="Réflexologie"
              class="hero-photo"
              onerror="this.style.display='none'">
       </div>
@@ -54,23 +41,64 @@
   <section id="apropos">
     <div class="container-inner">
       <div class="about-grid">
-        
         <div class="about-content reveal">
           <div class="about-tag">À PROPOS —</div>
           <h2 class="section-title">La réflexologie par<br><em>l'énergétique chinoise</em></h2>
           <p class="section-lead">
             Mon approche s'appuie sur les principes fondamentaux de la médecine traditionnelle chinoise. Le soin agit sur les méridiens pour relancer la circulation du Qi (l'énergie vitale). En stimulant ces points précis, la séance lève les blocages énergétiques et rétablit l'équilibre physiologique et émotionnel de l'organisme.
           </p>
-          <ul class="about-list-check">
-            <li>Libre circulation de l'énergie vitale</li>
-            <li>Levée des blocages physiques et émotionnels</li>
-            <li>Harmonisation des organes et des méridiens</li>
-            <li>Relance des capacités d'auto-guérison</li>
-          </ul>
+        </div>
+        <div class="about-visual reveal" style="transition-delay: 0.15s">
+          <img src="{{ url_for('static', filename='images/hero1.jpg') }}" alt="Soin réflexologie" class="about-img-mask">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION PRATICIENNE -->
+  <section id="praticienne">
+    <div class="container-inner">
+      <div class="about-grid">
+
+        <div class="about-visual reveal">
+          <img src="{{ url_for('static', filename='images/praticienne.jpg') }}"
+               alt="La praticienne"
+               class="about-img-mask"
+               onerror="this.style.display='none'">
         </div>
 
-        <div class="about-visual reveal" style="transition-delay: 0.15s">
-          <img src="{{ url_for('static', filename='images/hero1.jpg') }}" alt="Soin réflexologie" class="about-img-mask"> 
+        <div class="about-content reveal" style="transition-delay: 0.15s">
+          <div class="about-tag">LA PRATICIENNE —</div>
+          <h2 class="section-title">Une approche<br><em>humaine et bienveillante</em></h2>
+          <p class="section-lead">
+            [Votre texte de présentation ici]
+          </p>
+
+          <div class="praticienne-infos">
+
+            <div class="praticienne-info-item">
+              <span class="praticienne-info-label">Formation</span>
+              <span class="praticienne-info-value">[Diplôme / école]</span>
+            </div>
+
+            <div class="praticienne-info-item">
+              <span class="praticienne-info-label">Expérience</span>
+              <span class="praticienne-info-value">[X années de pratique]</span>
+            </div>
+
+            <div class="praticienne-info-item">
+              <span class="praticienne-info-label">Spécialité</span>
+              <span class="praticienne-info-value">[Médecine traditionnelle chinoise]</span>
+            </div>
+
+            <div class="praticienne-info-item">
+              <span class="praticienne-info-label">Public</span>
+              <span class="praticienne-info-value">Adultes et enfants</span>
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -83,31 +111,29 @@
       <div class="tarifs-grid">
         <div class="tarif-card reveal" style="transition-delay: 0.1s">
           <div class="tarif-name">Adulte</div>
-          <div class="tarif-desc">Séance complète adaptée à vos tensions et à votre rythme.</div>
           <div class="tarif-price">
             <span class="tarif-amount">60</span>
             <span class="tarif-unit">€ / h</span>
           </div>
-          <ul class="tarif-features">
-            <li>Séance d'une heure</li>
-            <li>Suivi personnalisé</li>
-            <li>Sur rendez-vous</li>
-          </ul>
+          <div class="tarif-features">
+            <p>Séance d'une heure</p>
+            <p>Suivi personnalisé</p>
+            <p>Sur rendez-vous</p>
+          </div>
           <a href="#reservation" class="tarif-btn">Réserver cette séance</a>
         </div>
         <div class="tarif-card featured reveal" style="transition-delay: 0.2s">
           <div class="tarif-name">Enfant</div>
-          <div class="tarif-desc">Séance douce et adaptée aux plus jeunes, pour favoriser leur équilibre naturel.</div>
           <div class="tarif-price">
             <span class="tarif-amount">45</span>
             <span class="tarif-unit">€ / h</span>
           </div>
-          <ul class="tarif-features">
-            <li>Approche douce et bienveillante</li>
-            <li>Séance d'une heure</li>
-            <li>Présence d'un parent bienvenue</li>
-            <li>Sur rendez-vous</li>
-          </ul>
+          <div class="tarif-features">
+            <p>Approche douce et bienveillante</p>
+            <p>Séance d'une heure</p>
+            <p>Présence d'un parent bienvenue</p>
+            <p>Sur rendez-vous</p>
+          </div>
           <a href="#reservation" class="tarif-btn">Réserver pour mon enfant</a>
         </div>
       </div>
@@ -147,7 +173,6 @@
         </div>
 
         <div class="booking-widget reveal" style="transition-delay: 0.2s">
-
           <div class="week-nav">
             <button class="week-nav-btn" onclick="changerSemaineClient(-1)" title="Semaine précédente">‹</button>
             <span class="week-nav-label" id="week-label">Chargement…</span>

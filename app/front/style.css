@@ -51,12 +51,12 @@ body { font-family: var(--font-body); background-color: var(--warm-white); color
 
 /* ===== HERO ===== */
 .hero {
-  min-height: 100vh; 
-  display: grid; 
+  min-height: 100vh;
+  display: grid;
   grid-template-columns: 1fr 1fr;
-  overflow: hidden; 
+  overflow: hidden;
   position: relative;
-  padding: 0; 
+  padding: 0;
 }
 .hero::before {
   content: ''; position: absolute; top: -10%; right: -5%; width: 55%; height: 120%;
@@ -81,6 +81,14 @@ body { font-family: var(--font-body); background-color: var(--warm-white); color
   color: var(--text); margin-bottom: 1.5rem;
 }
 .hero h1 em { color: var(--sage); }
+.hero-desc {
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--text-muted);
+  max-width: 420px;
+  margin-bottom: 2.5rem;
+}
 .hero-subtitle {
   font-size: 1rem; font-weight: 300; line-height: 1.7;
   color: var(--text-muted); max-width: 420px; margin-bottom: 2.5rem;
@@ -101,23 +109,21 @@ body { font-family: var(--font-body); background-color: var(--warm-white); color
 
 .hero-image {
   position: relative; z-index: 1;
-  padding: 0; 
+  padding: 0;
   animation: fadeIn 1.2s ease both 0.3s;
 }
-
 .hero-img-wrap {
-  width: 100%; height: 100%; 
-  border-radius: 0 0 0 150px; 
+  width: 100%; height: 100%;
+  border-radius: 0 0 0 150px;
   position: relative; box-shadow: var(--shadow);
   overflow: hidden;
 }
 .hero-photo {
   width: 100%; height: 100%;
-  object-fit: cover; 
+  object-fit: cover;
   object-position: center;
   display: block;
 }
-
 .hero-badge {
   position: absolute; bottom: 2rem; left: 1rem;
   background: white; border-radius: var(--radius); padding: 1.2rem 1.5rem;
@@ -125,10 +131,6 @@ body { font-family: var(--font-body); background-color: var(--warm-white); color
 }
 .hero-badge strong { display: block; font-size: 2rem; font-weight: 600; color: var(--sage-dark); }
 .hero-badge span { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-body); }
-.hero-stats { margin-top: 3rem; display: flex; gap: 2.5rem; }
-.stat { display: flex; flex-direction: column; }
-.stat strong { font-family: var(--font-display); font-size: 2rem; font-weight: 600; color: var(--sage-dark); }
-.stat span { font-size: 0.78rem; letter-spacing: 0.08em; color: var(--text-muted); text-transform: uppercase; }
 
 /* ===== SECTIONS COMMUNES ===== */
 section { padding: 7rem 2.5rem; }
@@ -148,10 +150,9 @@ h2.section-title em { color: var(--sage); }
 .container-inner { max-width: 1160px; margin: 0 auto; }
 
 /* ===== À PROPOS ===== */
-#apropos { background: var(--cream); } /* MODIFIÉ : Fond Crème */
+#apropos { background: var(--cream); }
 .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
 
-/* -- Textes et Listes -- */
 .about-tag {
   display: inline-block;
   background: var(--sage);
@@ -163,49 +164,26 @@ h2.section-title em { color: var(--sage); }
   text-transform: uppercase;
   margin-bottom: 1.5rem;
 }
-.about-list-check {
-  list-style: none;
-  margin: 1.5rem 0 2.5rem 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-.about-list-check li {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  font-size: 0.95rem;
-  color: var(--text);
-}
-.about-list-check li::before {
-  content: '✓';
-  color: var(--text);
-  font-size: 0.8rem;
-}
-.btn-square {
-  border-radius: 8px !important; 
-}
+.btn-square { border-radius: 8px !important; }
 
-/* -- Visuel et Image -- */
 .about-visual {
   position: relative;
-  padding: 1rem; 
+  padding: 1rem;
 }
 .about-img-mask {
   width: 100%;
   aspect-ratio: 4/5;
   object-fit: cover;
-  border-radius: 120px 16px 120px 16px; 
+  border-radius: 120px 16px 120px 16px;
   box-shadow: var(--shadow);
 }
 
-/* -- Cartes Glassmorphism -- */
 .about-glass-card {
   position: absolute;
-  background: rgba(255, 255, 255, 0.5); 
-  backdrop-filter: blur(8px); 
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(122, 155, 130, 0.3); 
+  border: 1px solid rgba(122, 155, 130, 0.3);
   border-radius: 12px;
   padding: 1.2rem 1.5rem;
   text-align: center;
@@ -228,32 +206,55 @@ h2.section-title em { color: var(--sage); }
   color: var(--text);
   margin-top: 0.2rem;
 }
-
-/* Positionnement des cartes */
 .card-top-right { top: 10%; right: -5%; }
 .card-bottom-left { bottom: 20%; left: -10%; }
 .card-bottom-right { bottom: 5%; right: 5%; }
-
-/* Petite icône sur la carte */
 .icon-check {
   background: var(--sage);
   color: white;
   border-radius: 50%;
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
   font-size: 0.7rem;
-  position: absolute;
-  top: -10px;
-  right: -10px;
+  position: absolute; top: -10px; right: -10px;
+}
+
+/* ===== PRATICIENNE ===== */
+#praticienne { background: var(--warm-white); }
+
+.praticienne-infos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 2rem;
+  margin-top: 2rem;
+}
+
+.praticienne-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.praticienne-info-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--sage);
+  font-weight: 500;
+}
+
+.praticienne-info-value {
+  font-size: 0.95rem;
+  color: var(--text);
+  font-weight: 400;
+  line-height: 1.5;
 }
 
 /* ===== TARIFS ===== */
-/* MODIFIÉ : Fond blanc chaud avec fines bordures de séparation */
-#tarifs { 
-  background: var(--warm-white); 
+#tarifs {
+  background: var(--warm-white);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
 }
@@ -263,20 +264,16 @@ h2.section-title em { color: var(--sage); }
 #tarifs h2.section-title em { color: var(--sage); font-style: italic; }
 #tarifs .section-lead { color: var(--text); margin-bottom: 4rem; }
 
-.tarifs-grid { 
-  display: grid; 
-  grid-template-columns: 1fr 1fr; 
+.tarifs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 6rem;
-  max-width: 900px; 
+  max-width: 900px;
 }
 
 .tarif-card {
-  background: transparent;
-  border: none;
-  padding: 0;
-  border-radius: 0;
-  box-shadow: none;
-  transition: none;
+  background: transparent; border: none; padding: 0;
+  border-radius: 0; box-shadow: none; transition: none;
 }
 .tarif-card:hover { transform: none; background: transparent; }
 .tarif-card.featured { background: transparent; border: none; }
@@ -284,78 +281,40 @@ h2.section-title em { color: var(--sage); }
 
 .tarif-name {
   font-family: var(--font-display);
-  font-size: 2.2rem;
-  font-weight: 400;
-  color: var(--text);
-  margin-bottom: 0.5rem;
+  font-size: 2.2rem; font-weight: 400; color: var(--text); margin-bottom: 0.5rem;
 }
 .tarif-card.featured .tarif-name { color: var(--text); }
-
 .tarif-desc { display: none; }
 
 .tarif-price {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  padding-bottom: 1.5rem;
-  margin-bottom: 1.5rem;
+  display: flex; align-items: baseline; gap: 0.5rem;
+  padding-bottom: 1.5rem; margin-bottom: 1.5rem;
   border-bottom: 1px solid var(--border);
 }
 .tarif-amount {
   font-family: var(--font-display);
-  font-size: 4.5rem;
-  font-weight: 300;
-  color: var(--sage-dark);
-  line-height: 1;
+  font-size: 4.5rem; font-weight: 300; color: var(--sage-dark); line-height: 1;
 }
 .tarif-card.featured .tarif-amount { color: var(--sage-dark); }
-
-.tarif-unit {
-  font-size: 1.2rem;
-  color: var(--text);
-  font-weight: 300;
-}
+.tarif-unit { font-size: 1.2rem; color: var(--text); font-weight: 300; }
 .tarif-card.featured .tarif-unit { color: var(--text); }
 
 .tarif-features {
-  list-style: none;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   margin-bottom: 2.5rem;
 }
-.tarif-features li {
+.tarif-features p {
   font-size: 0.95rem;
   color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
 }
-.tarif-card.featured .tarif-features li { color: var(--text); }
-
-.tarif-features li::before {
-  content: '✓';
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  font-weight: 300;
-  flex-shrink: 0;
-}
-.tarif-card.featured .tarif-features li::before { color: var(--text-muted); }
 
 .tarif-btn {
-  width: 100%;
-  padding: 1rem;
-  border-radius: 4px;
-  background: var(--sage);
-  color: white;
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  font-weight: 400;
-  cursor: pointer;
-  text-decoration: none;
-  display: block;
-  text-align: center;
-  transition: background 0.3s;
+  width: 100%; padding: 1rem; border-radius: 4px;
+  background: var(--sage); color: white; font-family: var(--font-body);
+  font-size: 0.95rem; font-weight: 400; cursor: pointer;
+  text-decoration: none; display: block; text-align: center; transition: background 0.3s;
 }
 .tarif-btn:hover { background: var(--sage-dark); }
 .tarif-card.featured .tarif-btn { background: var(--sage); color: white; border: none; }
@@ -451,32 +410,16 @@ footer { background: var(--text); color: rgba(247,243,236,0.5); padding: 4rem 2.
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* ===== DASHBOARD — LAYOUT ===== */
-.admin-wrap {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  min-height: 100vh;
-}
+.admin-wrap { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
 
 /* ===== DASHBOARD — SIDEBAR ===== */
 .sidebar {
-  background: var(--text);
-  padding: 2rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  background: var(--text); padding: 2rem 1.5rem;
+  display: flex; flex-direction: column; gap: 0.5rem;
+  position: sticky; top: 0; height: 100vh;
 }
-.sidebar-logo {
-  font-family: var(--font-display);
-  font-size: 2rem; font-weight: 300; color: var(--cream);
-  letter-spacing: 0.06em; margin-bottom: 0.25rem;
-}
-.sidebar-subtitle {
-  font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
-  color: rgba(247,243,236,0.35); margin-bottom: 2rem;
-}
+.sidebar-logo { font-family: var(--font-display); font-size: 2rem; font-weight: 300; color: var(--cream); letter-spacing: 0.06em; margin-bottom: 0.25rem; }
+.sidebar-subtitle { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(247,243,236,0.35); margin-bottom: 2rem; }
 .sidebar-nav { display: flex; flex-direction: column; gap: 0.25rem; flex: 1; }
 .sidebar-link {
   display: flex; align-items: center; gap: 0.75rem;
@@ -497,21 +440,16 @@ footer { background: var(--text); color: rgba(247,243,236,0.5); padding: 4rem 2.
 
 /* ===== DASHBOARD — MAIN ===== */
 .main-content { padding: 2.5rem 3rem; overflow-x: hidden; }
-
 .section { display: none; }
 .section.active { display: block; animation: fadeUp 0.4s ease both; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
 .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; }
 .page-title { font-family: var(--font-display); font-size: 2.2rem; font-weight: 300; color: var(--text); }
 .page-title em { color: var(--sage); font-style: italic; }
 
 /* ===== DASHBOARD — STATS ===== */
 .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 2.5rem; }
-.stat-card {
-  background: white; border-radius: var(--radius); padding: 1.5rem 1.75rem;
-  border: 1px solid var(--border); box-shadow: var(--shadow); transition: transform 0.2s;
-}
+.stat-card { background: white; border-radius: var(--radius); padding: 1.5rem 1.75rem; border: 1px solid var(--border); box-shadow: var(--shadow); transition: transform 0.2s; }
 .stat-card:hover { transform: translateY(-2px); }
 .stat-label { font-size: 0.73rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.6rem; }
 .stat-value { font-family: var(--font-display); font-size: 2.6rem; font-weight: 600; color: var(--sage-dark); line-height: 1; }
@@ -520,45 +458,24 @@ footer { background: var(--text); color: rgba(247,243,236,0.5); padding: 4rem 2.
 /* ===== DASHBOARD — CALENDRIER ===== */
 .cal-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
 .cal-week-label { font-family: var(--font-display); font-size: 1.35rem; font-weight: 400; color: var(--text); flex: 1; }
-.cal-nav-btn {
-  width: 36px; height: 36px; border-radius: 50%;
-  border: 1.5px solid var(--border); background: white; color: var(--text-muted);
-  font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-}
+.cal-nav-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border); background: white; color: var(--text-muted); font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
 .cal-nav-btn:hover { border-color: var(--sage); color: var(--sage-dark); background: var(--cream); }
-
 .cal-legend { display: flex; gap: 1.25rem; align-items: center; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 1.5rem; }
 .leg-item { display: flex; align-items: center; gap: 0.4rem; }
 .leg-dot { width: 8px; height: 8px; border-radius: 50%; }
 .leg-dot.libre { background: var(--sage); }
 .leg-dot.occupe { background: var(--text); }
 .leg-dot.ferme { background: var(--border); border: 1px solid rgba(122,113,103,0.2); }
-
 .cal-container { background: white; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); overflow: hidden; }
 .cal-grid { display: grid; grid-template-columns: 64px repeat(7, 1fr); }
-
 .cal-corner { background: var(--cream); border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
 .cal-day-header { padding: 0.8rem 0.5rem; text-align: center; background: var(--cream); border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
 .cal-day-header.today { background: rgba(122,155,130,0.08); }
 .cal-day-header .day-name { display: block; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.2rem; }
 .cal-day-header .day-num { display: block; font-family: var(--font-display); font-size: 1.3rem; font-weight: 400; color: var(--text); }
 .cal-day-header.today .day-num { color: var(--sage-dark); font-weight: 600; }
-
-.cal-time-label {
-  padding: 0 0.75rem; display: flex; align-items: center; justify-content: flex-end;
-  font-size: 0.72rem; color: var(--text-muted);
-  border-bottom: 1px solid rgba(122,155,130,0.08); border-right: 1px solid var(--border);
-  background: var(--cream); font-variant-numeric: tabular-nums;
-}
-
-.cal-slot {
-  padding: 0.55rem 0.5rem;
-  border-right: 1px solid rgba(122,155,130,0.08);
-  border-bottom: 1px solid rgba(122,155,130,0.08);
-  cursor: pointer; transition: all 0.18s;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 0.2rem; min-height: 48px; text-align: center;
-}
+.cal-time-label { padding: 0 0.75rem; display: flex; align-items: center; justify-content: flex-end; font-size: 0.72rem; color: var(--text-muted); border-bottom: 1px solid rgba(122,155,130,0.08); border-right: 1px solid var(--border); background: var(--cream); font-variant-numeric: tabular-nums; }
+.cal-slot { padding: 0.55rem 0.5rem; border-right: 1px solid rgba(122,155,130,0.08); border-bottom: 1px solid rgba(122,155,130,0.08); cursor: pointer; transition: all 0.18s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem; min-height: 48px; text-align: center; }
 .cal-slot:hover { filter: brightness(0.96); transform: scale(0.97); }
 .cal-slot.ferme { background: transparent; }
 .cal-slot.ferme .slot-icon { color: rgba(122,113,103,0.4); font-size: 0.7rem; }
@@ -567,41 +484,19 @@ footer { background: var(--text); color: rgba(247,243,236,0.5); padding: 4rem 2.
 .cal-slot.libre .slot-label { font-size: 0.68rem; color: var(--sage-dark); font-weight: 500; letter-spacing: 0.04em; }
 .cal-slot.occupe { background: rgba(42,42,42,0.06); }
 .cal-slot.occupe .slot-icon { color: var(--text); font-size: 0.45rem; }
-.cal-slot.occupe .slot-name {
-  font-size: 0.65rem; color: var(--text); font-weight: 500; line-height: 1.2;
-  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
+.cal-slot.occupe .slot-name { font-size: 0.65rem; color: var(--text); font-weight: 500; line-height: 1.2; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .slot-msg-icon { font-size: 0.6rem; opacity: 0.55; line-height: 1; }
 
 /* ===== DASHBOARD — MODAL ===== */
-.modal-overlay {
-  display: none; position: fixed; inset: 0; z-index: 200;
-  background: rgba(42,42,42,0.35); backdrop-filter: blur(4px);
-  align-items: center; justify-content: center;
-}
+.modal-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(42,42,42,0.35); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
 .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
-
-.modal-card {
-  background: white; border-radius: 20px; padding: 2rem;
-  width: 100%; max-width: 400px;
-  box-shadow: 0 24px 64px rgba(42,42,42,0.18);
-  animation: slideUp 0.25s ease;
-  max-height: 90vh; overflow-y: auto;
-}
+.modal-card { background: white; border-radius: 20px; padding: 2rem; width: 100%; max-width: 400px; box-shadow: 0 24px 64px rgba(42,42,42,0.18); animation: slideUp 0.25s ease; max-height: 90vh; overflow-y: auto; }
 @keyframes slideUp { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-.modal-close {
-  float: right; background: none; border: none; font-size: 1.3rem;
-  color: var(--text-muted); cursor: pointer; padding: 0; margin-top: -0.25rem; transition: color 0.2s;
-}
+.modal-close { float: right; background: none; border: none; font-size: 1.3rem; color: var(--text-muted); cursor: pointer; padding: 0; margin-top: -0.25rem; transition: color 0.2s; }
 .modal-close:hover { color: var(--text); }
 .modal-label { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--sage); margin-bottom: 0.5rem; }
 #modal-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 400; color: var(--text); margin-bottom: 1.5rem; line-height: 1.3; }
-
-.modal-status {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  padding: 0.45rem 1rem; border-radius: 50px; font-size: 0.82rem; font-weight: 500; margin-bottom: 1rem;
-}
+.modal-status { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.45rem 1rem; border-radius: 50px; font-size: 0.82rem; font-weight: 500; margin-bottom: 1rem; }
 .modal-status .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .modal-status.libre { background: rgba(122,155,130,0.12); color: var(--sage-dark); }
 .modal-status.libre .status-dot { background: var(--sage); }
@@ -610,13 +505,7 @@ footer { background: var(--text); color: rgba(247,243,236,0.5); padding: 4rem 2.
 .modal-status.ferme { background: rgba(122,113,103,0.08); color: var(--text-muted); }
 .modal-status.ferme .status-dot { background: var(--text-muted); opacity: 0.4; }
 .modal-hint { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
-
-/* Carte client dans la modal */
-.modal-client-card {
-  background: var(--cream); border-radius: 12px;
-  padding: 1rem 1.2rem; margin-bottom: 1rem;
-  display: flex; flex-direction: column; gap: 0.55rem;
-}
+.modal-client-card { background: var(--cream); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.55rem; }
 .modal-client-name { font-family: var(--font-display); font-size: 1.4rem; font-weight: 400; color: var(--text); margin-bottom: 0.15rem; }
 .modal-info-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.84rem; color: var(--text-muted); }
 .modal-info-icon { font-size: 0.78rem; width: 18px; text-align: center; flex-shrink: 0; opacity: 0.7; }
@@ -624,22 +513,11 @@ footer { background: var(--text); color: rgba(247,243,236,0.5); padding: 4rem 2.
 .modal-info-empty { font-style: italic; opacity: 0.5; }
 .modal-tel { color: var(--sage-dark); text-decoration: none; font-weight: 500; transition: color 0.2s; }
 .modal-tel:hover { color: var(--sage); }
-
-/* Bloc message dans la modal */
-.modal-message-block {
-  background: rgba(122,155,130,0.07); border: 1px solid rgba(122,155,130,0.22);
-  border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 0.75rem;
-}
+.modal-message-block { background: rgba(122,155,130,0.07); border: 1px solid rgba(122,155,130,0.22); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 0.75rem; }
 .modal-message-label { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sage-dark); font-weight: 500; margin-bottom: 0.5rem; }
 .modal-message-content { font-size: 0.88rem; color: var(--text); line-height: 1.65; white-space: pre-wrap; }
-
-/* Boutons d'action modal */
 .modal-actions { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1.75rem; }
-.modal-btn {
-  width: 100%; padding: 0.85rem; border-radius: 50px;
-  font-family: var(--font-body); font-size: 0.88rem; font-weight: 500;
-  letter-spacing: 0.04em; cursor: pointer; transition: all 0.2s; border: none; text-align: center;
-}
+.modal-btn { width: 100%; padding: 0.85rem; border-radius: 50px; font-family: var(--font-body); font-size: 0.88rem; font-weight: 500; letter-spacing: 0.04em; cursor: pointer; transition: all 0.2s; border: none; text-align: center; }
 .modal-btn.primary { background: var(--sage); color: white; }
 .modal-btn.primary:hover { background: var(--sage-dark); transform: translateY(-1px); }
 .modal-btn.secondary { background: transparent; color: var(--text-muted); border: 1.5px solid var(--border); }
@@ -649,10 +527,7 @@ footer { background: var(--text); color: rgba(247,243,236,0.5); padding: 4rem 2.
 
 /* ===== DASHBOARD — RDV ===== */
 .rdv-list { display: flex; flex-direction: column; gap: 1rem; }
-.rdv-card {
-  background: white; border-radius: var(--radius); border: 1px solid var(--border);
-  padding: 1.25rem 1.5rem; box-shadow: var(--shadow); display: flex; align-items: center; gap: 1.5rem;
-}
+.rdv-card { background: white; border-radius: var(--radius); border: 1px solid var(--border); padding: 1.25rem 1.5rem; box-shadow: var(--shadow); display: flex; align-items: center; gap: 1.5rem; }
 .rdv-date { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--sage-dark); min-width: 50px; text-align: center; line-height: 1; }
 .rdv-date small { display: block; font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-body); margin-top: 0.2rem; }
 .rdv-info { flex: 1; }
@@ -661,18 +536,11 @@ footer { background: var(--text); color: rgba(247,243,236,0.5); padding: 4rem 2.
 .rdv-badge { padding: 0.3rem 0.9rem; border-radius: 50px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.04em; }
 .rdv-badge.attente { background: rgba(122,155,130,0.12); color: var(--sage-dark); }
 .rdv-badge.confirme { background: rgba(42,42,42,0.06); color: var(--text); }
-
-.empty-state {
-  text-align: center; padding: 3rem; color: var(--text-muted);
-  font-size: 0.9rem; background: white; border-radius: var(--radius); border: 1px dashed var(--border);
-}
+.empty-state { text-align: center; padding: 3rem; color: var(--text-muted); font-size: 0.9rem; background: white; border-radius: var(--radius); border: 1px dashed var(--border); }
 .empty-state span { display: block; font-size: 2rem; margin-bottom: 0.75rem; opacity: 0.4; }
 
 /* ===== DASHBOARD — MESSAGES ===== */
-.message-card {
-  background: white; border-radius: var(--radius); border: 1px solid var(--border);
-  padding: 1.25rem 1.5rem; box-shadow: var(--shadow); margin-bottom: 1rem;
-}
+.message-card { background: white; border-radius: var(--radius); border: 1px solid var(--border); padding: 1.25rem 1.5rem; box-shadow: var(--shadow); margin-bottom: 1rem; }
 .msg-header { display: flex; justify-content: space-between; margin-bottom: 0.6rem; }
 .msg-author { font-weight: 500; font-size: 0.9rem; }
 .msg-date { font-size: 0.78rem; color: var(--text-muted); }
@@ -689,6 +557,7 @@ footer { background: var(--text); color: rgba(247,243,236,0.5); padding: 4rem 2.
   .tarifs-grid { grid-template-columns: 1fr; max-width: 440px; }
   .reservation-grid { grid-template-columns: 1fr; gap: 3rem; }
   .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .praticienne-infos { grid-template-columns: 1fr; }
 }
 @media (max-width: 960px) {
   .admin-wrap { grid-template-columns: 1fr; }
@@ -707,4 +576,5 @@ footer { background: var(--text); color: rgba(247,243,236,0.5); padding: 4rem 2.
   .cal-slot { min-height: 38px; padding: 0.3rem 0.2rem; }
   .cal-slot .slot-name { display: none; }
   .modal-card { margin: 1rem; max-width: 100%; }
+  .praticienne-infos { grid-template-columns: 1fr; }
 }
